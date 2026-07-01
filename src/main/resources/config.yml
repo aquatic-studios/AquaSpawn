@@ -1,0 +1,50 @@
+settings:
+  # the spawn players are teleported to. it must be a spawn you created
+  # with /aquaspawn create <name>. set it to "none" to disable teleporting.
+  join-spawn: "none"
+
+  # how players are teleported to the spawn on join:
+  #   first  -> only the very first time they ever join
+  #   force  -> every single time they join
+  #   custom -> use the "custom" section below (fully configurable)
+  type-spawn: force
+
+  # only used when type-spawn is set to "custom".
+  #   first -> spawn used the very first time a player joins
+  #   force -> spawn used on every join after the first one
+  # each field takes a created spawn name, or "none" / "null" / "false"
+  # to disable that side so the player is not teleported.
+  # example: first: "welcome"  force: "hub"
+  #   -> first join sends them to "welcome", every later join to "hub".
+  custom:
+    first: "none"
+    force: "none"
+
+  # if true, the vanilla "player joined the game" message is hidden
+  hide-join-message: false
+  # if true, the vanilla "player left the game" message is hidden
+  hide-quit-message: false
+
+spawn:
+  # cooldown in seconds between uses of /spawn.
+  # note: leave it on 0 to disable the cooldown. players with the
+  # permission aquaspawn.spawn.bypass are never affected by it.
+  cooldown: 3
+
+join:
+  # the welcome message sent to a player when they join.
+  # set enabled to false to turn the whole message off.
+  enabled: false
+  # available variables per line:
+  #   <empty>   -> prints an empty line
+  #   <center>  -> centers the rest of the line (https://github.com/senkex/CenterMessage)
+  # note: PlaceholderAPI placeholders (%player_name%) work if the plugin is installed.
+  message:
+    - "<empty>"
+    - "<center>&7&m-----------------------------"
+    - "<empty>"
+    - "<center>&#54ADF4⚓"
+    - "<center>&fWelcome &#54ADF4%player_name% &fto the server"
+    - "<empty>"
+    - "<center>&7&m-----------------------------"
+    - "<empty>"

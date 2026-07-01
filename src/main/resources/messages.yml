@@ -1,0 +1,33 @@
+prefix: "&#54ADF4&lAquaSpawn &7» &f"
+
+help:
+  - " "
+  - "&#54ADF4&lAquaSpawn &7- &fCommands"
+  - " "
+  - "&#54ADF4/spawn &7- &fTeleport to the spawn"
+  - " "
+  - "&#54ADF4/aquaspawn menu &7- &fOpen the spawn menu"
+  - "&#54ADF4/aquaspawn reload &7- &fReload all files"
+  - "&#54ADF4/aquaspawn create <name> &7- &fCreate a spawn here"
+  - "&#54ADF4/aquaspawn set <name> <first/force/custom> &7- &fSet the join spawn"
+  - " "
+
+messages:
+  no-permission: "%prefix%You don't have permission to do that"
+  players-only: "%prefix%Only players can run this command"
+  unknown-command: "%prefix%Unknown command, try &#54ADF4/aquaspawn help"
+  reload: "%prefix%Reloaded config, menu & messages &#56FF00Correctly"
+
+  spawn-type-invalid: "%prefix%Invalid spawn type, use &#54ADF4<first/force/custom>"
+  spawn-created: "%prefix%Spawn &#54ADF4%aquaspawn_name% &fwas created &#56FF00Correctly"
+  spawn-exists: "%prefix%Spawn &#54ADF4%aquaspawn_name% &falready exists"
+  spawn-usage-create: "%prefix%Usage: &#54ADF4/aquaspawn create <name>"
+  spawn-usage-set: "%prefix%Usage: &#54ADF4/aquaspawn set <name> <first/force/custom>"
+  spawn-set: "%prefix%Spawn &#54ADF4%aquaspawn_name% &fis now the join spawn &#54ADF4(%aquaspawn_type%)"
+  menu-full: "%prefix%The menu is full, no free slots left"
+
+  spawn-teleported: "%prefix%You have been teleported to spawn &#56FF00Correctly"
+  spawn-cooldown: "%prefix%&#FFA42D[Warning] Wait &#FFA42D%time%s &fbefore using &#54ADF4/spawn &fagain"
+  spawn-not-created: "%prefix%&#FFA42D[Warning] There is no spawn named &7(%aquaspawn_name%)&#FFA42D. Create it first with &#54ADF4/aquaspawn create %aquaspawn_name%"
+  spawn-not-set: "%prefix%&#FFA42D[Warning] The spawn is not set yet, set one with &#54ADF4/aquaspawn set <name> <first/force/custom>"
+  spawn-world-missing: "%prefix%&#FFA42D[Warning] The spawn world is not loaded, check your config.yml"

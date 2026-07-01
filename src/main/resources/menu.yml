@@ -1,0 +1,14 @@
+menu_title: '&8AquaSpawn'
+size: 45
+
+items:
+  close:
+    material: BARRIER
+    slot: 40
+    display_name: '&#FF5E5E&lClose'
+    lore:
+      - '&7Click to close the menu'
+    left_click_commands:
+      - '[close]'
+    right_click_commands:
+      - '[close]'
