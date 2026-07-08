@@ -1,9 +1,9 @@
 package com.aquaticstudios.aquaspawn.menu;
 
-import com.aquaticstudios.aquaspawn.util.ColorUtils;
-import com.aquaticstudios.aquaspawn.util.Items;
-import com.aquaticstudios.aquaspawn.util.Placeholders;
-import com.aquaticstudios.aquaspawn.util.Scheduler;
+import com.aquaticstudios.aquaspawn.utils.ColorUtils;
+import com.aquaticstudios.aquaspawn.utils.Items;
+import com.aquaticstudios.aquaspawn.utils.Placeholders;
+import com.aquaticstudios.aquaspawn.utils.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;

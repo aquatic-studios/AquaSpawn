@@ -1,4 +1,4 @@
-package com.aquaticstudios.aquaspawn.util;
+package com.aquaticstudios.aquaspawn.utils;
 
 import net.md_5.bungee.api.ChatColor;
 

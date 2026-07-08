@@ -1,9 +1,9 @@
 package com.aquaticstudios.aquaspawn.menu;
 
 import com.aquaticstudios.aquaspawn.config.ConfigFile;
-import com.aquaticstudios.aquaspawn.util.ColorUtils;
-import com.aquaticstudios.aquaspawn.util.Items;
-import com.aquaticstudios.aquaspawn.util.Placeholders;
+import com.aquaticstudios.aquaspawn.utils.ColorUtils;
+import com.aquaticstudios.aquaspawn.utils.Items;
+import com.aquaticstudios.aquaspawn.utils.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;

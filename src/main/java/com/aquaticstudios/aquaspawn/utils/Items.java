@@ -1,4 +1,4 @@
-package com.aquaticstudios.aquaspawn.util;
+package com.aquaticstudios.aquaspawn.utils;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;

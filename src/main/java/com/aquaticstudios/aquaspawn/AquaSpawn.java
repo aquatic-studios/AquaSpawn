@@ -9,7 +9,8 @@ import com.aquaticstudios.aquaspawn.listener.JoinListener;
 import com.aquaticstudios.aquaspawn.listener.SpawnListener;
 import com.aquaticstudios.aquaspawn.menu.MenuListener;
 import com.aquaticstudios.aquaspawn.menu.MenuManager;
-import com.aquaticstudios.aquaspawn.util.Scheduler;
+import com.aquaticstudios.aquaspawn.utils.Metrics;
+import com.aquaticstudios.aquaspawn.utils.Scheduler;
 import com.github.senkex.headrender.HeadRender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
@@ -19,6 +20,9 @@ public final class AquaSpawn extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        int pluginId = 32483;
+        new Metrics(this, pluginId);
+
         ConfigFile config = new ConfigFile(this, "config.yml");
         ConfigFile menuFile = new ConfigFile(this, "menu.yml");
         ConfigFile messagesFile = new ConfigFile(this, "messages.yml");

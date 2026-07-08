@@ -1,9 +1,9 @@
 package com.aquaticstudios.aquaspawn.listener;
 
 import com.aquaticstudios.aquaspawn.config.ConfigFile;
-import com.aquaticstudios.aquaspawn.util.ColorUtils;
-import com.aquaticstudios.aquaspawn.util.Placeholders;
-import com.aquaticstudios.aquaspawn.util.Scheduler;
+import com.aquaticstudios.aquaspawn.utils.ColorUtils;
+import com.aquaticstudios.aquaspawn.utils.Placeholders;
+import com.aquaticstudios.aquaspawn.utils.Scheduler;
 import com.github.senkex.centermessage.CenterMessage;
 import com.github.senkex.headrender.HeadRender;
 import org.bukkit.entity.Player;

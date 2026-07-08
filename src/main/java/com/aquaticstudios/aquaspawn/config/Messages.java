@@ -1,6 +1,6 @@
 package com.aquaticstudios.aquaspawn.config;
 
-import com.aquaticstudios.aquaspawn.util.ColorUtils;
+import com.aquaticstudios.aquaspawn.utils.ColorUtils;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
