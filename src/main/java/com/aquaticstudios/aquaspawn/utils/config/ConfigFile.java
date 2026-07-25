@@ -1,4 +1,4 @@
-package com.aquaticstudios.aquaspawn.config;
+package com.aquaticstudios.aquaspawn.utils.config;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

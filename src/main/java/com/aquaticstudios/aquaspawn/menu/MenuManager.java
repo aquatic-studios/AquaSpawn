@@ -1,7 +1,8 @@
 package com.aquaticstudios.aquaspawn.menu;
 
-import com.aquaticstudios.aquaspawn.config.ConfigFile;
-import com.aquaticstudios.aquaspawn.utils.ColorUtils;
+import com.aquaticstudios.aquaspawn.utils.CC;
+
+import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.Items;
 import com.aquaticstudios.aquaspawn.utils.Placeholders;
 import org.bukkit.Bukkit;
@@ -35,7 +36,7 @@ public final class MenuManager {
 
     public void load() {
         items.clear();
-        title = ColorUtils.color(menuFile.get().getString("menu_title", "&#54ADF4&lAquaSpawn"));
+        title = CC.format(menuFile.get().getString("menu_title", "&#54ADF4&lAquaSpawn"));
         size = clampSize(menuFile.get().getInt("size", 45));
 
         ConfigurationSection itemsSection = menuFile.get().getConfigurationSection("items");
@@ -78,10 +79,10 @@ public final class MenuManager {
         ItemStack stack = new ItemStack(Items.material(item.material()));
         ItemMeta meta = stack.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(ColorUtils.color(Placeholders.apply(player, item.displayName())));
+            meta.setDisplayName(CC.format(Placeholders.apply(player, item.displayName())));
             List<String> lore = new ArrayList<>(item.lore().size());
             for (String line : item.lore()) {
-                lore.add(ColorUtils.color(Placeholders.apply(player, line)));
+                lore.add(CC.format(Placeholders.apply(player, line)));
             }
             meta.setLore(lore);
             stack.setItemMeta(meta);

@@ -1,7 +1,8 @@
 package com.aquaticstudios.aquaspawn.listener;
 
-import com.aquaticstudios.aquaspawn.config.ConfigFile;
-import com.aquaticstudios.aquaspawn.utils.ColorUtils;
+import com.aquaticstudios.aquaspawn.utils.CC;
+
+import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.Placeholders;
 import com.aquaticstudios.aquaspawn.utils.Scheduler;
 import com.github.senkex.centermessage.CenterMessage;
@@ -66,12 +67,12 @@ public final class JoinListener implements Listener {
 
     private String process(Player player, String line) {
         if (line.trim().equalsIgnoreCase("<empty>")) {
-            return ColorUtils.color("&r");
+            return CC.format("&r");
         }
         String resolved = Placeholders.apply(player, line);
         if (resolved.contains("<center>")) {
             return CenterMessage.center(resolved.replace("<center>", ""));
         }
-        return ColorUtils.color(resolved);
+        return CC.format(resolved);
     }
 }

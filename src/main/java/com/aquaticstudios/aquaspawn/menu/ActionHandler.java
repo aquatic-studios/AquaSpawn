@@ -1,6 +1,7 @@
 package com.aquaticstudios.aquaspawn.menu;
 
-import com.aquaticstudios.aquaspawn.utils.ColorUtils;
+import com.aquaticstudios.aquaspawn.utils.CC;
+
 import com.aquaticstudios.aquaspawn.utils.Items;
 import com.aquaticstudios.aquaspawn.utils.Placeholders;
 import com.aquaticstudios.aquaspawn.utils.Scheduler;
@@ -45,7 +46,7 @@ public final class ActionHandler {
                 Scheduler.runForEntityLater(plugin, player, player::closeInventory, 1L);
                 break;
             case "message":
-                player.sendMessage(ColorUtils.color(Placeholders.apply(player, data)));
+                player.sendMessage(CC.format(Placeholders.apply(player, data)));
                 break;
             case "command":
                 String command = Placeholders.apply(player, data).replace("%player%", player.getName());

@@ -1,9 +1,10 @@
 package com.aquaticstudios.aquaspawn.command;
 
-import com.aquaticstudios.aquaspawn.config.ConfigFile;
-import com.aquaticstudios.aquaspawn.config.Messages;
+import com.aquaticstudios.aquaspawn.utils.CC;
+
+import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
+import com.aquaticstudios.aquaspawn.utils.config.Messages;
 import com.aquaticstudios.aquaspawn.menu.MenuManager;
-import com.aquaticstudios.aquaspawn.utils.ColorUtils;
 import com.aquaticstudios.aquaspawn.utils.VersionUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -69,10 +70,10 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
     }
 
     private void banner(CommandSender sender) {
-        sender.sendMessage(ColorUtils.color(" "));
-        sender.sendMessage(ColorUtils.color("            &#54ADF4&lAquaSpawn &fversion &#8DFF87[" + pluginVersion + "] &7(" + VersionUtil.getVersion() + ")"));
-        sender.sendMessage(ColorUtils.color("           &fPowered by &#8BD5FFSenkex @ Aquatic Studios"));
-        sender.sendMessage(ColorUtils.color(" "));
+        sender.sendMessage(CC.format(" "));
+        sender.sendMessage(CC.format("            &#54ADF4&lAquaSpawn &fversion &#8DFF87[" + pluginVersion + "] &7(" + VersionUtil.getVersion() + ")"));
+        sender.sendMessage(CC.format("           &fPowered by &#8BD5FFSenkex @ Aquatic Studios"));
+        sender.sendMessage(CC.format(" "));
     }
 
     private void help(CommandSender sender) {

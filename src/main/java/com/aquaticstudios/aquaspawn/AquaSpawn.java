@@ -2,13 +2,14 @@ package com.aquaticstudios.aquaspawn;
 
 import com.aquaticstudios.aquaspawn.command.AquaCommand;
 import com.aquaticstudios.aquaspawn.command.SpawnCommand;
-import com.aquaticstudios.aquaspawn.config.ConfigFile;
-import com.aquaticstudios.aquaspawn.config.Messages;
+import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
+import com.aquaticstudios.aquaspawn.utils.config.Messages;
 import com.aquaticstudios.aquaspawn.listener.DefaultListener;
 import com.aquaticstudios.aquaspawn.listener.JoinListener;
 import com.aquaticstudios.aquaspawn.listener.SpawnListener;
 import com.aquaticstudios.aquaspawn.menu.MenuListener;
 import com.aquaticstudios.aquaspawn.menu.MenuManager;
+import com.aquaticstudios.aquaspawn.utils.CC;
 import com.aquaticstudios.aquaspawn.utils.Metrics;
 import com.aquaticstudios.aquaspawn.utils.Scheduler;
 import com.github.senkex.headrender.HeadRender;
@@ -22,6 +23,8 @@ public final class AquaSpawn extends JavaPlugin {
     public void onEnable() {
         int pluginId = 32483;
         new Metrics(this, pluginId);
+
+        CC.init(this);
 
         ConfigFile config = new ConfigFile(this, "config.yml");
         ConfigFile menuFile = new ConfigFile(this, "menu.yml");
@@ -54,6 +57,7 @@ public final class AquaSpawn extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        CC.shutdown();
         try {
             HeadRender.shutdown();
         } catch (Throwable ignored) {

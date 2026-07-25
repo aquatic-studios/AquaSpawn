@@ -1,6 +1,6 @@
 package com.aquaticstudios.aquaspawn.listener;
 
-import com.aquaticstudios.aquaspawn.config.ConfigFile;
+import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;

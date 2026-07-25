@@ -31,3 +31,5 @@ messages:
   spawn-not-created: "%prefix%&#FFA42D[Warning] There is no spawn named &7(%aquaspawn_name%)&#FFA42D. Create it first with &#54ADF4/aquaspawn create %aquaspawn_name%"
   spawn-not-set: "%prefix%&#FFA42D[Warning] The spawn is not set yet, set one with &#54ADF4/aquaspawn set <name> <first/force/custom>"
   spawn-world-missing: "%prefix%&#FFA42D[Warning] The spawn world is not loaded, check your config.yml"
+
+version: 1

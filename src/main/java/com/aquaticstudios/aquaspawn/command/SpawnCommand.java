@@ -1,7 +1,7 @@
 package com.aquaticstudios.aquaspawn.command;
 
-import com.aquaticstudios.aquaspawn.config.ConfigFile;
-import com.aquaticstudios.aquaspawn.config.Messages;
+import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
+import com.aquaticstudios.aquaspawn.utils.config.Messages;
 import com.aquaticstudios.aquaspawn.utils.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

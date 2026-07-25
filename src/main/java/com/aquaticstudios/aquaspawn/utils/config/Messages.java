@@ -1,6 +1,7 @@
-package com.aquaticstudios.aquaspawn.config;
+package com.aquaticstudios.aquaspawn.utils.config;
 
-import com.aquaticstudios.aquaspawn.utils.ColorUtils;
+import com.aquaticstudios.aquaspawn.utils.CC;
+
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public final class Messages {
         for (int i = 0; i + 1 < replacements.length; i += 2) {
             raw = raw.replace(replacements[i], replacements[i + 1]);
         }
-        return ColorUtils.color(raw);
+        return CC.format(raw);
     }
 
     public void send(CommandSender target, String key, String... replacements) {
@@ -33,7 +34,7 @@ public final class Messages {
     public void sendList(CommandSender target, String key) {
         List<String> lines = file.get().getStringList(key);
         for (String line : lines) {
-            target.sendMessage(ColorUtils.color(line.replace("%prefix%", prefix())));
+            target.sendMessage(CC.format(line.replace("%prefix%", prefix())));
         }
     }
 }
