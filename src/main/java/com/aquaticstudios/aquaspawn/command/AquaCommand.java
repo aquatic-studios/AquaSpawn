@@ -69,6 +69,9 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
             case "set":
                 set(sender, args);
                 return true;
+            case "custom":
+                custom(sender, args);
+                return true;
             default:
                 messages.send(sender, "unknown-command");
                 return true;
@@ -134,7 +137,7 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
         }
         String name = args[1];
         String type = args[2].toLowerCase(Locale.ROOT);
-        if (!type.equals("first") && !type.equals("force") && !type.equals("custom")) {
+        if (!type.equals("first") && !type.equals("force")) {
             messages.send(sender, "spawn-type-invalid");
             return;
         }
@@ -143,28 +146,6 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
             messages.send(sender, "spawn-not-created", "%aquaspawn_name%", name);
             return;
         }
-
-        if (type.equals("custom")) {
-            String firstArg = extract(args, "first:");
-            String forceArg = extract(args, "force:");
-            if (firstArg == null || forceArg == null) {
-                messages.send(sender, "spawn-usage-set-custom");
-                return;
-            }
-            String firstResolved = resolveSpawnOrNone(firstArg);
-            if (firstResolved == null) {
-                messages.send(sender, "spawn-not-created", "%aquaspawn_name%", firstArg);
-                return;
-            }
-            String forceResolved = resolveSpawnOrNone(forceArg);
-            if (forceResolved == null) {
-                messages.send(sender, "spawn-not-created", "%aquaspawn_name%", forceArg);
-                return;
-            }
-            config.get().set("settings.custom.first", firstResolved);
-            config.get().set("settings.custom.force", forceResolved);
-        }
-
         config.get().set("settings.join-spawn", resolved);
         config.get().set("settings.type-spawn", type);
         config.save();
@@ -172,8 +153,38 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
         messages.send(sender, "spawn-set", "%aquaspawn_name%", resolved, "%aquaspawn_type%", type);
     }
 
+    private void custom(CommandSender sender, String[] args) {
+        if (!Permissions.has(sender, "aquaspawn.set")) {
+            messages.send(sender, "no-permission");
+            return;
+        }
+        String firstArg = extract(args, "first:");
+        String forceArg = extract(args, "force:");
+        if (firstArg == null || forceArg == null) {
+            messages.send(sender, "spawn-usage-custom");
+            return;
+        }
+        String firstResolved = resolveSpawnOrNone(firstArg);
+        if (firstResolved == null) {
+            messages.send(sender, "spawn-not-created", "%aquaspawn_name%", firstArg);
+            return;
+        }
+        String forceResolved = resolveSpawnOrNone(forceArg);
+        if (forceResolved == null) {
+            messages.send(sender, "spawn-not-created", "%aquaspawn_name%", forceArg);
+            return;
+        }
+        config.get().set("settings.custom.first", firstResolved);
+        config.get().set("settings.custom.force", forceResolved);
+        config.get().set("settings.join-spawn", forceResolved);
+        config.get().set("settings.type-spawn", "custom");
+        config.save();
+        config.reload();
+        messages.send(sender, "spawn-set", "%aquaspawn_name%", forceResolved, "%aquaspawn_type%", "custom");
+    }
+
     private static String extract(String[] args, String key) {
-        for (int i = 3; i < args.length; i++) {
+        for (int i = 1; i < args.length; i++) {
             String arg = args[i];
             if (arg.length() > key.length() && arg.regionMatches(true, 0, key, 0, key.length())) {
                 return arg.substring(key.length());
@@ -315,15 +326,15 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return filter(Arrays.asList("menu", "help", "reload", "reset", "create", "set"), args[0]);
+            return filter(Arrays.asList("menu", "help", "reload", "reset", "create", "set", "custom"), args[0]);
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("set")) {
             return filter(spawnNames(), args[1]);
         }
         if (args.length == 3 && args[0].equalsIgnoreCase("set")) {
-            return filter(Arrays.asList("first", "force", "custom"), args[2]);
+            return filter(Arrays.asList("first", "force"), args[2]);
         }
-        if (args.length >= 4 && args[0].equalsIgnoreCase("set") && args[2].equalsIgnoreCase("custom")) {
+        if (args.length >= 2 && args[0].equalsIgnoreCase("custom")) {
             String token = args[args.length - 1];
             String lower = token.toLowerCase(Locale.ROOT);
             String prefix = lower.startsWith("force:") ? "force:" : lower.startsWith("first:") ? "first:" : null;
