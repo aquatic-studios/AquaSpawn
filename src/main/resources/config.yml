@@ -31,22 +31,115 @@ spawn:
   # permission aquaspawn.spawn.bypass are never affected by it.
   cooldown: 3
 
-join:
-  # the welcome message sent to a player when they join.
-  # set enabled to false to turn the whole message off.
-  enabled: false
-  # available variables per line:
-  #   <empty>   -> prints an empty line
-  #   <center>  -> centers the rest of the line (https://github.com/senkex/CenterMessage)
-  # note: PlaceholderAPI placeholders (%player_name%) work if the plugin is installed.
-  message:
-    - "<empty>"
-    - "<center>&7&m-----------------------------"
-    - "<empty>"
-    - "<center>&#54ADF4⚓"
-    - "<center>&fWelcome &#54ADF4%player_name% &fto the server"
-    - "<empty>"
-    - "<center>&7&m-----------------------------"
-    - "<empty>"
+# everything shown/run when a player joins. every channel below is optional and
+# fully editable (toggles, timings in ticks/seconds, sounds, colors).
+#
+# text syntax (works in every channel):
+#   &a / &#54ADF4     -> legacy and hex colors
+#   <gradient> <bold> -> full MiniMessage tags
+#   %player_name%     -> PlaceholderAPI placeholders (if installed)
+#   %aquaspawn_total_players%  -> unique players that ever joined
+#   %aquaspawn_player_number%  -> this player's permanent join number
+#   <center>...</center>       -> center the line
+#   <hd>name</hd> / %head:name% -> render a player's head as pixel art (chat only)
+custom-join:
+  # master switch for everything below.
+  enabled: true
+
+  # runs on EVERY join.
+  join-motd:
+    enabled: true
+    chat:
+      enabled: true
+      message:
+        - "<empty>"
+        - "<center>&fWelcome back &#54ADF4%player_name%"
+        - "<empty>"
+    # action bar text; "stay" is how many seconds it stays visible.
+    actionbar:
+      enabled: false
+      text: "&#54ADF4Welcome back, %player_name%!"
+      stay: 3
+    # timings in ticks (20 ticks = 1 second).
+    title:
+      enabled: false
+      fade-in: 10
+      stay: 40
+      fade-out: 10
+      title: "&#54ADF4Welcome"
+      subtitle: "&f%player_name%"
+    # color:   PINK / BLUE / RED / GREEN / YELLOW / PURPLE / WHITE
+    # overlay: PROGRESS / NOTCHED_6 / NOTCHED_10 / NOTCHED_12 / NOTCHED_20
+    # stay:    seconds the bar stays before it is removed.
+    bossbar:
+      enabled: false
+      text: "&aWelcome to the server"
+      color: BLUE
+      overlay: PROGRESS
+      progress: 1.0
+      stay: 5
+    # SOUND:volume:pitch
+    sound:
+      enabled: false
+      value: "BLOCK_NOTE_BLOCK_PLING:1:1"
+
+  # runs ONLY the very first time a player ever joins.
+  first-join:
+    enabled: true
+    # true  -> first join shows ONLY this (join-motd is skipped for new players)
+    # false -> both first-join and join-motd run on the first join
+    override: true
+    chat:
+      enabled: true
+      message:
+        - "<empty>"
+        - "<center><hd>%player_name%</hd></center>"
+        - "<empty>"
+        - "<center>&fWelcome &#54ADF4%player_name% &fto the server"
+        - "<center>&7You are player &#54ADF4#%aquaspawn_player_number%"
+        - "<empty>"
+    actionbar:
+      enabled: false
+      text: "&#8DFF87Welcome to the server!"
+      stay: 4
+    title:
+      enabled: true
+      fade-in: 10
+      stay: 60
+      fade-out: 10
+      title: "&#54ADF4&lWelcome"
+      subtitle: "&fYou are player &#8DFF87#%aquaspawn_player_number%"
+    bossbar:
+      enabled: false
+      text: "&aEnjoy your stay!"
+      color: GREEN
+      overlay: PROGRESS
+      progress: 1.0
+      stay: 6
+    # type:   BALL / BALL_LARGE / STAR / BURST / CREEPER
+    # colors and fade-colors take hex values.
+    firework:
+      enabled: true
+      power: 1
+      type: BALL_LARGE
+      colors: [ "#54ADF4", "#8DFF87" ]
+      fade-colors: [ "#FFFFFF" ]
+      flicker: true
+      trail: true
+    sound:
+      enabled: true
+      value: "ENTITY_PLAYER_LEVELUP:1:1"
+
+  # commands/actions run on join, gated by the world and optional conditions.
+  # action types: [player] [console] [message] [actionbar]
+  #               [title] fadeIn;stay;fadeOut;title;subtitle
+  #               [sound] S:vol:pitch   [effect] EFFECT:ticks:amplifier   [firework]
+  # conditions: "LEFT <op> RIGHT" with == equals != > >= < <= contains regex
+  #             (spaces are required around the operator).
+  actions:
+    disable-worlds:
+      - "world_the_end"
+    conditions: [ ]
+    run: [ ]
 
 version: 1
