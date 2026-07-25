@@ -1,7 +1,7 @@
 package com.aquaticstudios.aquaspawn.listener;
 
 import com.aquaticstudios.aquaspawn.join.CustomJoin;
-import com.aquaticstudios.aquaspawn.utils.PlayerData;
+import com.aquaticstudios.aquaspawn.data.PlayerData;
 import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

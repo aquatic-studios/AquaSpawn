@@ -3,7 +3,7 @@ package com.aquaticstudios.aquaspawn.menu;
 import com.aquaticstudios.aquaspawn.utils.CC;
 import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.Items;
-import com.aquaticstudios.aquaspawn.utils.Placeholders;
+import com.aquaticstudios.aquaspawn.placeholder.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;

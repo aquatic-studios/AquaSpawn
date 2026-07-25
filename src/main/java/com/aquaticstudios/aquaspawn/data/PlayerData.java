@@ -1,5 +1,6 @@
-package com.aquaticstudios.aquaspawn.utils;
+package com.aquaticstudios.aquaspawn.data;
 
+import com.aquaticstudios.aquaspawn.scheduler.Scheduler;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;

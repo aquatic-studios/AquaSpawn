@@ -1,5 +1,6 @@
 package com.aquaticstudios.aquaspawn.utils;
 
+import com.aquaticstudios.aquaspawn.scheduler.Scheduler;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.ConfigurationSection;

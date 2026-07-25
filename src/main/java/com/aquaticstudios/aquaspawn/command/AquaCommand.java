@@ -4,7 +4,7 @@ import com.aquaticstudios.aquaspawn.utils.CC;
 import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.config.Messages;
 import com.aquaticstudios.aquaspawn.menu.MenuManager;
-import com.aquaticstudios.aquaspawn.utils.PlayerData;
+import com.aquaticstudios.aquaspawn.data.PlayerData;
 import com.aquaticstudios.aquaspawn.utils.VersionUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

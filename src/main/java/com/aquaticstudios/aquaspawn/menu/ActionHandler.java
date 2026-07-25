@@ -2,8 +2,8 @@ package com.aquaticstudios.aquaspawn.menu;
 
 import com.aquaticstudios.aquaspawn.utils.CC;
 import com.aquaticstudios.aquaspawn.utils.Fireworks;
-import com.aquaticstudios.aquaspawn.utils.Placeholders;
-import com.aquaticstudios.aquaspawn.utils.Scheduler;
+import com.aquaticstudios.aquaspawn.placeholder.Placeholders;
+import com.aquaticstudios.aquaspawn.scheduler.Scheduler;
 import com.aquaticstudios.aquaspawn.utils.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

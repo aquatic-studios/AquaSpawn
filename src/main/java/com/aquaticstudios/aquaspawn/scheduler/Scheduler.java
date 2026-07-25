@@ -1,4 +1,4 @@
-package com.aquaticstudios.aquaspawn.utils;
+package com.aquaticstudios.aquaspawn.scheduler;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

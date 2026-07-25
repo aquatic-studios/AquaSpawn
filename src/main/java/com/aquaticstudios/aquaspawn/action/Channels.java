@@ -2,7 +2,7 @@ package com.aquaticstudios.aquaspawn.action;
 
 import com.aquaticstudios.aquaspawn.utils.CC;
 import com.aquaticstudios.aquaspawn.utils.Fireworks;
-import com.aquaticstudios.aquaspawn.utils.Scheduler;
+import com.aquaticstudios.aquaspawn.scheduler.Scheduler;
 import com.aquaticstudios.aquaspawn.utils.Sounds;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;

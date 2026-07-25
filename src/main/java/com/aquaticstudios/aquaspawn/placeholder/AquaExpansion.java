@@ -1,5 +1,6 @@
-package com.aquaticstudios.aquaspawn.utils;
+package com.aquaticstudios.aquaspawn.placeholder;
 
+import com.aquaticstudios.aquaspawn.data.PlayerData;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;

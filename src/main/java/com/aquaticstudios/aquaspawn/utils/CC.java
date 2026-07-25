@@ -1,5 +1,6 @@
 package com.aquaticstudios.aquaspawn.utils;
 
+import com.aquaticstudios.aquaspawn.placeholder.Placeholders;
 import com.github.senkex.centermessage.components.CenterMessageComponents;
 import com.github.senkex.headrender.HeadRender;
 import com.github.senkex.headrender.HeadRenderComponents;

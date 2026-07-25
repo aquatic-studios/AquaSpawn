@@ -20,7 +20,7 @@ public final class CustomJoin {
     }
 
     public void handle(Player player, boolean firstJoin) {
-        ConfigurationSection root = config.get().getConfigurationSection("join");
+        ConfigurationSection root = config.get().getConfigurationSection("custom-events");
         if (root == null || !root.getBoolean("enabled", true)) {
             return;
         }
@@ -35,9 +35,9 @@ public final class CustomJoin {
         }
 
         if (!handledByFirstJoin) {
-            ConfigurationSection motd = root.getConfigurationSection("join-motd");
-            if (motd != null && motd.getBoolean("enabled", true)) {
-                channels.play(player, motd);
+            ConfigurationSection join = root.getConfigurationSection("join");
+            if (join != null && join.getBoolean("enabled", true)) {
+                channels.play(player, join);
             }
         }
 

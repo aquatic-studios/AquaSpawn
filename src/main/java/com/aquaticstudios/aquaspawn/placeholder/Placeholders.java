@@ -1,4 +1,4 @@
-package com.aquaticstudios.aquaspawn.utils;
+package com.aquaticstudios.aquaspawn.placeholder;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
