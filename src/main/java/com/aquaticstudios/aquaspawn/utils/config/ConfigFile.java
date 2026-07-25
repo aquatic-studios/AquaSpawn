@@ -2,6 +2,8 @@ package com.aquaticstudios.aquaspawn.utils.config;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
+import dev.dejvokep.boostedyaml.libs.org.snakeyaml.engine.v2.common.FlowStyle;
+import dev.dejvokep.boostedyaml.libs.org.snakeyaml.engine.v2.common.ScalarStyle;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
@@ -68,7 +70,10 @@ public final class ConfigFile {
                     new ByteArrayInputStream(defaults),
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(true).build(),
-                    DumperSettings.DEFAULT,
+                    DumperSettings.builder()
+                            .setFlowStyle(FlowStyle.BLOCK)
+                            .setStringStyle(ScalarStyle.DOUBLE_QUOTED)
+                            .build(),
                     updater.build());
             document.save();
         } catch (IOException e) {
