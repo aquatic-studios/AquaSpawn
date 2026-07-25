@@ -45,9 +45,6 @@ public final class CC {
     };
     private static final String CODES = "0123456789abcdef";
 
-    private CC() {
-    }
-
     public static void init(Plugin plugin) {
         audiences = BukkitAudiences.create(plugin);
 

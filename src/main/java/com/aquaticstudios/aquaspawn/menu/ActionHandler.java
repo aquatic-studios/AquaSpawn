@@ -103,8 +103,8 @@ public final class ActionHandler {
             plugin.getLogger().warning("Unknown potion effect: " + parts[0]);
             return;
         }
-        int duration = parts.length > 1 ? parseInt(parts[1], 200) : 200;
-        int amplifier = parts.length > 2 ? parseInt(parts[2], 0) : 0;
+        int amplifier = parts.length > 1 ? parseInt(parts[1], 0) : 0;
+        int duration = parts.length > 2 ? parseInt(parts[2], 0) * 20 : Integer.MAX_VALUE;
         Scheduler.runForEntity(plugin, player, () ->
                 player.addPotionEffect(new PotionEffect(type, duration, amplifier)));
     }

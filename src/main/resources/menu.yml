@@ -13,5 +13,4 @@ items:
     right_click_commands:
       - '[close]'
 
-# internal schema version — do not edit.
 version: 1

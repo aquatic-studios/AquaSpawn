@@ -5,9 +5,6 @@ import org.bukkit.entity.Player;
 
 public final class Sounds {
 
-    private Sounds() {
-    }
-
     public static void play(Player player, String data) {
         if (player == null || data == null || data.trim().isEmpty()) {
             return;

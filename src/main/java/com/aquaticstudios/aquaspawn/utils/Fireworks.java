@@ -14,9 +14,6 @@ import java.util.Locale;
 
 public final class Fireworks {
 
-    private Fireworks() {
-    }
-
     public static void spawn(Plugin plugin, Player player, ConfigurationSection section) {
         if (section == null || !section.getBoolean("enabled", true)) {
             return;

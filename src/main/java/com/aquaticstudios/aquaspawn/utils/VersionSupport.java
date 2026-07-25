@@ -4,9 +4,6 @@ public final class VersionSupport {
 
     private static final int MINOR = parseMinor(VersionUtil.getVersion());
 
-    private VersionSupport() {
-    }
-
     public static int minor() {
         return MINOR;
     }

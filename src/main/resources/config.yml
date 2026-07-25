@@ -130,16 +130,14 @@ join:
       enabled: true
       value: "ENTITY_PLAYER_LEVELUP:1:1"
 
-  # commands/actions run on join, gated by the world and optional conditions.
-  # action types: [player] [console] [message] [actionbar]
-  #               [title] fadeIn;stay;fadeOut;title;subtitle
-  #               [sound] S:vol:pitch   [effect] EFFECT:ticks:amplifier   [firework]
-  # conditions: "LEFT <op> RIGHT" with == equals != > >= < <= contains regex
-  #             (spaces are required around the operator).
+  # actions run when a player joins.
+  #   [PLAYER]  <command>  -> the joining player runs the command
+  #   [CONSOLE] <command>  -> the console runs the command
+  #   [EFFECT]  TYPE:amplifier[:seconds]  -> potion effect (permanent if no seconds)
+  # also available: [MESSAGE] [ACTIONBAR] [SOUND] S:vol:pitch [FIREWORK]
   actions:
-    disable-worlds:
-      - "world_the_end"
-    conditions: [ ]
-    run: [ ]
+    - "[CONSOLE] give %player% diamond 1"
+    - "[PLAYER] kit claim"
+    - "[EFFECT] SPEED:2"
 
 version: 1
