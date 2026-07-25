@@ -8,6 +8,7 @@ help:
   - " "
   - "&#54ADF4/aquaspawn menu &7- &fOpen the spawn menu"
   - "&#54ADF4/aquaspawn reload &7- &fReload all files"
+  - "&#54ADF4/aquaspawn reset &7- &fReset the total players counter"
   - "&#54ADF4/aquaspawn create <name> &7- &fCreate a spawn here"
   - "&#54ADF4/aquaspawn set <name> <first/force/custom> &7- &fSet the join spawn"
   - " "
@@ -17,6 +18,7 @@ messages:
   players-only: "%prefix%Only players can run this command"
   unknown-command: "%prefix%Unknown command, try &#54ADF4/aquaspawn help"
   reload: "%prefix%Reloaded config, menu & messages &#56FF00Correctly"
+  reset: "%prefix%Total players counter was reset to &#54ADF40 &#56FF00Correctly"
 
   spawn-type-invalid: "%prefix%Invalid spawn type, use &#54ADF4<first/force/custom>"
   spawn-created: "%prefix%Spawn &#54ADF4%aquaspawn_name% &fwas created &#56FF00Correctly"

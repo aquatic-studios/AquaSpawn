@@ -63,6 +63,12 @@ public final class PlayerData {
         return firstJoins.remove(uuid);
     }
 
+    public synchronized void reset() {
+        data = new YamlConfiguration();
+        firstJoins.clear();
+        saveAsync(data.saveToString());
+    }
+
     public void flush() {
         synchronized (this) {
             String snapshot = data.saveToString();

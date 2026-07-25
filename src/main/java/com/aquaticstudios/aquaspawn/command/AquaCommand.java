@@ -4,6 +4,7 @@ import com.aquaticstudios.aquaspawn.utils.CC;
 import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.config.Messages;
 import com.aquaticstudios.aquaspawn.menu.MenuManager;
+import com.aquaticstudios.aquaspawn.utils.PlayerData;
 import com.aquaticstudios.aquaspawn.utils.VersionUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,9 +29,10 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
     private final ConfigFile messagesFile;
     private final Messages messages;
     private final MenuManager menu;
+    private final PlayerData playerData;
 
     public AquaCommand(Plugin plugin, ConfigFile config, ConfigFile menuFile,
-                       ConfigFile messagesFile, Messages messages, MenuManager menu) {
+                       ConfigFile messagesFile, Messages messages, MenuManager menu, PlayerData playerData) {
         this.plugin = plugin;
         this.pluginVersion = plugin.getDescription().getVersion();
         this.config = config;
@@ -38,6 +40,7 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
         this.messagesFile = messagesFile;
         this.messages = messages;
         this.menu = menu;
+        this.playerData = playerData;
     }
 
     @Override
@@ -55,6 +58,9 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
                 return true;
             case "reload":
                 reload(sender);
+                return true;
+            case "reset":
+                reset(sender);
                 return true;
             case "create":
                 create(sender, args);
@@ -105,6 +111,15 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
         messagesFile.reload();
         menu.load();
         messages.send(sender, "reload");
+    }
+
+    private void reset(CommandSender sender) {
+        if (!sender.hasPermission("aquaspawn.reset")) {
+            messages.send(sender, "no-permission");
+            return;
+        }
+        playerData.reset();
+        messages.send(sender, "reset");
     }
 
     private void set(CommandSender sender, String[] args) {
@@ -256,7 +271,7 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return filter(Arrays.asList("menu", "help", "reload", "create", "set"), args[0]);
+            return filter(Arrays.asList("menu", "help", "reload", "reset", "create", "set"), args[0]);
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("set")) {
             return filter(spawnNames(), args[1]);

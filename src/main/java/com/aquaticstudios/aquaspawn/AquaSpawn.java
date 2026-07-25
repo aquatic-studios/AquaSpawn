@@ -50,7 +50,7 @@ public final class AquaSpawn extends JavaPlugin {
             new AquaExpansion(this, playerData).register();
         }
 
-        AquaCommand command = new AquaCommand(this, config, menuFile, messagesFile, messages, menu);
+        AquaCommand command = new AquaCommand(this, config, menuFile, messagesFile, messages, menu, playerData);
         PluginCommand pluginCommand = getCommand("aquaspawn");
         if (pluginCommand != null) {
             pluginCommand.setExecutor(command);
