@@ -22,6 +22,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AquaSpawn extends JavaPlugin {
 
+    private PlayerData playerData;
+
     @Override
     public void onEnable() {
         int pluginId = 32483;
@@ -35,7 +37,7 @@ public final class AquaSpawn extends JavaPlugin {
 
         Messages messages = new Messages(messagesFile);
         MenuManager menu = new MenuManager(this, menuFile);
-        PlayerData playerData = new PlayerData(this);
+        playerData = new PlayerData(this);
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerDataListener(playerData), this);
@@ -66,6 +68,9 @@ public final class AquaSpawn extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (playerData != null) {
+            playerData.flush();
+        }
         CC.shutdown();
         try {
             HeadRender.shutdown();

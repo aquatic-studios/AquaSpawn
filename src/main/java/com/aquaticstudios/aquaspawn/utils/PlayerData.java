@@ -6,6 +6,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,6 +19,7 @@ public final class PlayerData {
 
     private final Plugin plugin;
     private final File file;
+    private final Object saveLock = new Object();
     private FileConfiguration data;
 
     private final Set<UUID> firstJoins = ConcurrentHashMap.newKeySet();
@@ -53,18 +56,31 @@ public final class PlayerData {
         data.set(TOTAL_ROUTE, data.getInt(TOTAL_ROUTE, 0) + 1);
         data.set(route, true);
         firstJoins.add(uuid);
-        save();
+        saveAsync(data.saveToString());
     }
 
     public boolean consumeFirstJoin(UUID uuid) {
         return firstJoins.remove(uuid);
     }
 
-    private void save() {
-        try {
-            data.save(file);
-        } catch (IOException e) {
-            plugin.getLogger().severe("Could not save data.yml: " + e.getMessage());
+    public void flush() {
+        synchronized (this) {
+            String snapshot = data.saveToString();
+            write(snapshot);
+        }
+    }
+
+    private void saveAsync(String snapshot) {
+        Scheduler.runAsync(plugin, () -> write(snapshot));
+    }
+
+    private void write(String snapshot) {
+        synchronized (saveLock) {
+            try {
+                Files.write(file.toPath(), snapshot.getBytes(StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                plugin.getLogger().severe("Could not save data.yml: " + e.getMessage());
+            }
         }
     }
 }

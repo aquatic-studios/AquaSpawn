@@ -62,4 +62,18 @@ public final class Scheduler {
     public static void teleport(Plugin plugin, Entity entity, Location location) {
         entity.teleportAsync(location);
     }
+
+    public static void runAsync(Plugin plugin, Runnable task) {
+        if (!FOLIA) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, task);
+            return;
+        }
+        try {
+            Object scheduler = Bukkit.class.getMethod("getAsyncScheduler").invoke(null);
+            Method runNow = scheduler.getClass().getMethod("runNow", Plugin.class, Consumer.class);
+            runNow.invoke(scheduler, plugin, (Consumer<Object>) ignored -> task.run());
+        } catch (Throwable t) {
+            task.run();
+        }
+    }
 }
