@@ -164,14 +164,18 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
             messages.send(sender, "spawn-usage-custom");
             return;
         }
-        String firstResolved = resolveSpawnOrNone(firstArg);
+        String firstResolved = resolveSpawn(firstArg);
         if (firstResolved == null) {
             messages.send(sender, "spawn-not-created", "%aquaspawn_name%", firstArg);
             return;
         }
-        String forceResolved = resolveSpawnOrNone(forceArg);
+        String forceResolved = resolveSpawn(forceArg);
         if (forceResolved == null) {
             messages.send(sender, "spawn-not-created", "%aquaspawn_name%", forceArg);
+            return;
+        }
+        if (firstResolved.equalsIgnoreCase(forceResolved)) {
+            messages.send(sender, "spawn-custom-same");
             return;
         }
         config.get().set("settings.custom.first", firstResolved);
@@ -180,7 +184,7 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
         config.get().set("settings.type-spawn", "custom");
         config.save();
         config.reload();
-        messages.send(sender, "spawn-set", "%aquaspawn_name%", forceResolved, "%aquaspawn_type%", "custom");
+        messages.send(sender, "spawn-set-custom", "%aquaspawn_first%", firstResolved, "%aquaspawn_force%", forceResolved);
     }
 
     private static String extract(String[] args, String key) {
@@ -191,21 +195,6 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
             }
         }
         return null;
-    }
-
-    private String resolveSpawnOrNone(String value) {
-        if (isDisabled(value)) {
-            return "none";
-        }
-        return resolveSpawn(value);
-    }
-
-    private static boolean isDisabled(String value) {
-        if (value == null) {
-            return true;
-        }
-        String v = value.trim();
-        return v.isEmpty() || v.equalsIgnoreCase("none") || v.equalsIgnoreCase("null") || v.equalsIgnoreCase("false");
     }
 
     private String resolveSpawn(String name) {
@@ -342,7 +331,6 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
                 return filter(Arrays.asList("first:", "force:"), token);
             }
             List<String> options = new ArrayList<>();
-            options.add(prefix + "none");
             for (String spawn : spawnNames()) {
                 options.add(prefix + spawn);
             }

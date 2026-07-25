@@ -42,6 +42,8 @@ messages:
   spawn-usage-set: "%prefix%Usage: &#54ADF4/aquaspawn set <name> <first/force>"
   spawn-usage-custom: "%prefix%Usage: &#54ADF4/aquaspawn custom first:<name> force:<name>"
   spawn-set: "%prefix%Spawn &#54ADF4%aquaspawn_name% &fis now the join spawn &#54ADF4(%aquaspawn_type%)"
+  spawn-set-custom: "%prefix%Custom spawn set &7» &fnew players &#54ADF4%aquaspawn_first% &7| &freturning &#54ADF4%aquaspawn_force%"
+  spawn-custom-same: "%prefix%&#FFA42D[Warning] first and force can't be the same spawn, use &#54ADF4/aquaspawn set <name> force"
   menu-full: "%prefix%The menu is full, no free slots left"
 
   spawn-no-permission: "%prefix%&#FFA42D[Warning] You don't have permission to use &#54ADF4/spawn"
