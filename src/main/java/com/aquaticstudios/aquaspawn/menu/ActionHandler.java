@@ -2,17 +2,27 @@ package com.aquaticstudios.aquaspawn.menu;
 
 import com.aquaticstudios.aquaspawn.utils.CC;
 
-import com.aquaticstudios.aquaspawn.utils.Items;
+import com.aquaticstudios.aquaspawn.utils.Fireworks;
 import com.aquaticstudios.aquaspawn.utils.Placeholders;
 import com.aquaticstudios.aquaspawn.utils.Scheduler;
+import com.aquaticstudios.aquaspawn.utils.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
+import java.util.Locale;
 
+/**
+ * Runs the inline {@code [type] data} action list shared by menus and join events. Supported
+ * types: {@code [message]}, {@code [actionbar]}, {@code [title] fadeIn;stay;fadeOut;title;subtitle},
+ * {@code [player]}/{@code [command]}, {@code [console]}, {@code [sound] S:vol:pitch},
+ * {@code [effect] EFFECT:ticks:amplifier}, {@code [firework]}, {@code [teleport] x,y,z,yaw,pitch}
+ * and {@code [close]}.
+ */
 public final class ActionHandler {
 
     private final Plugin plugin;
@@ -46,29 +56,66 @@ public final class ActionHandler {
                 Scheduler.runForEntityLater(plugin, player, player::closeInventory, 1L);
                 break;
             case "message":
-                player.sendMessage(CC.format(Placeholders.apply(player, data)));
+                CC.send(player, data);
+                break;
+            case "actionbar":
+                CC.sendActionBar(player, data);
+                break;
+            case "title":
+                title(player, data);
                 break;
             case "command":
-                String command = Placeholders.apply(player, data).replace("%player%", player.getName());
-                Bukkit.dispatchCommand(player, command);
+            case "player":
+                Scheduler.runForEntity(plugin, player, () ->
+                        Bukkit.dispatchCommand(player, resolveCommand(player, data)));
+                break;
+            case "console":
+                Scheduler.runForEntity(plugin, player, () ->
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), resolveCommand(player, data)));
                 break;
             case "sound":
-                playSound(player, data);
+                Sounds.play(player, data);
+                break;
+            case "effect":
+                effect(player, data);
+                break;
+            case "firework":
+                Fireworks.spawn(plugin, player, null);
                 break;
             case "teleport":
                 teleport(player, data);
                 break;
             default:
-                plugin.getLogger().warning("Unknown menu action: [" + type + "]");
+                plugin.getLogger().warning("Unknown action: [" + type + "]");
         }
     }
 
-    private void playSound(Player player, String data) {
+    private String resolveCommand(Player player, String data) {
+        return Placeholders.apply(player, data).replace("%player%", player.getName());
+    }
+
+    private void title(Player player, String data) {
+        // fadeIn;stay;fadeOut;title;subtitle  (timings in ticks, all parts optional but ordered)
+        String[] parts = data.split(";", 5);
+        int fadeIn = parts.length > 0 ? parseInt(parts[0], 10) : 10;
+        int stay = parts.length > 1 ? parseInt(parts[1], 40) : 40;
+        int fadeOut = parts.length > 2 ? parseInt(parts[2], 10) : 10;
+        String title = parts.length > 3 ? parts[3] : "";
+        String subtitle = parts.length > 4 ? parts[4] : "";
+        CC.sendTitle(player, fadeIn, stay, fadeOut, title, subtitle);
+    }
+
+    private void effect(Player player, String data) {
         String[] parts = data.split(":");
-        Sound sound = Items.sound(parts[0]);
-        float volume = parts.length > 1 ? parseFloat(parts[1], 1.0F) : 1.0F;
-        float pitch = parts.length > 2 ? parseFloat(parts[2], 1.0F) : 1.0F;
-        player.playSound(player.getLocation(), sound, volume, pitch);
+        PotionEffectType type = PotionEffectType.getByName(parts[0].trim().toUpperCase(Locale.ROOT));
+        if (type == null) {
+            plugin.getLogger().warning("Unknown potion effect: " + parts[0]);
+            return;
+        }
+        int duration = parts.length > 1 ? parseInt(parts[1], 200) : 200;
+        int amplifier = parts.length > 2 ? parseInt(parts[2], 0) : 0;
+        Scheduler.runForEntity(plugin, player, () ->
+                player.addPotionEffect(new PotionEffect(type, duration, amplifier)));
     }
 
     private void teleport(Player player, String data) {
@@ -91,6 +138,14 @@ public final class ActionHandler {
     private static float parseFloat(String value, float fallback) {
         try {
             return Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            return fallback;
+        }
+    }
+
+    private static int parseInt(String value, int fallback) {
+        try {
+            return Integer.parseInt(value.trim());
         } catch (NumberFormatException e) {
             return fallback;
         }

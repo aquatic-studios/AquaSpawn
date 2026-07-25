@@ -12,10 +12,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.title.Title;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -206,6 +208,16 @@ public final class CC {
 
     public static void sendActionBar(Player player, String input) {
         audience(player).sendActionBar(parse(player, input));
+    }
+
+    /** Shows a title/subtitle with tick-based timings (20 ticks = 1 second). */
+    public static void sendTitle(Player player, int fadeInTicks, int stayTicks, int fadeOutTicks,
+                                 String title, String subtitle) {
+        Title.Times times = Title.Times.times(
+                Duration.ofMillis(Math.max(0, fadeInTicks) * 50L),
+                Duration.ofMillis(Math.max(0, stayTicks) * 50L),
+                Duration.ofMillis(Math.max(0, fadeOutTicks) * 50L));
+        audience(player).showTitle(Title.title(parse(player, title), parse(player, subtitle), times));
     }
 
     // ------------------------------------------------------------------ head normalisation

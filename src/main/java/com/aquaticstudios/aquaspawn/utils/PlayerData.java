@@ -6,7 +6,9 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Persistent player bookkeeping stored in {@code data.yml}.
@@ -22,6 +24,9 @@ public final class PlayerData {
     private final Plugin plugin;
     private final File file;
     private FileConfiguration data;
+
+    /** UUIDs registered for the first time this session, pending consumption by the join handler. */
+    private final Set<UUID> firstJoins = ConcurrentHashMap.newKeySet();
 
     public PlayerData(Plugin plugin) {
         this.plugin = plugin;
@@ -71,8 +76,17 @@ public final class PlayerData {
         int assigned = data.getInt(TOTAL_ROUTE, 0) + 1;
         data.set(TOTAL_ROUTE, assigned);
         data.set(route, assigned);
+        firstJoins.add(uuid);
         save();
         return assigned;
+    }
+
+    /**
+     * Returns whether this player joined for the very first time this session, clearing the flag.
+     * Set by {@link #register(UUID)}, consumed once by the join handler.
+     */
+    public boolean consumeFirstJoin(UUID uuid) {
+        return firstJoins.remove(uuid);
     }
 
     private void save() {
