@@ -14,18 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * A YAML config that is kept in sync with the packaged defaults.
- *
- * <p>On load, BoostedYAML merges the bundled resource into the file on disk: it adds any new
- * options, restores dropped comments and bumps the {@code version} field, while
- * {@link UpdaterSettings.Builder#setKeepAll(boolean) keepAll} preserves everything the user or
- * the plugin added at runtime (e.g. created spawns in {@code menu.yml}). The rest of the plugin
- * keeps reading through Bukkit's {@link FileConfiguration}, so nothing else has to change.</p>
- */
 public final class ConfigFile {
 
-    /** Route of the schema version field used for migrations. */
     private static final String VERSION_ROUTE = "version";
 
     private final Plugin plugin;
@@ -57,11 +47,9 @@ public final class ConfigFile {
         }
     }
 
-    /** Creates the file from defaults if missing, then merges/updates it via BoostedYAML. */
     private void synchronize() {
         InputStream defaults = plugin.getResource(name);
         if (defaults == null) {
-            // no packaged default to merge against; fall back to a plain copy.
             if (!file.exists()) {
                 plugin.saveResource(name, false);
             }

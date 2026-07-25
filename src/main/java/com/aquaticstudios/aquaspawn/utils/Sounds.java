@@ -3,9 +3,6 @@ package com.aquaticstudios.aquaspawn.utils;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-/**
- * Parses and plays the shared {@code SOUND:volume:pitch} sound format (volume and pitch optional).
- */
 public final class Sounds {
 
     private Sounds() {

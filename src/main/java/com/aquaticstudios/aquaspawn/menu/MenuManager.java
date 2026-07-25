@@ -1,7 +1,6 @@
 package com.aquaticstudios.aquaspawn.menu;
 
 import com.aquaticstudios.aquaspawn.utils.CC;
-
 import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.Items;
 import com.aquaticstudios.aquaspawn.utils.Placeholders;

@@ -9,11 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
-/**
- * Delivers the configurable welcome experience on join, delegating to {@link CustomJoin}. First-join
- * status is read from {@link PlayerData}, which {@code PlayerDataListener} populates at LOWEST
- * priority before this listener runs.
- */
 public final class JoinListener implements Listener {
 
     private final PlayerData playerData;

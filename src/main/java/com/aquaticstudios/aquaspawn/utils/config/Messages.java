@@ -1,7 +1,6 @@
 package com.aquaticstudios.aquaspawn.utils.config;
 
 import com.aquaticstudios.aquaspawn.utils.CC;
-
 import org.bukkit.command.CommandSender;
 
 import java.util.List;

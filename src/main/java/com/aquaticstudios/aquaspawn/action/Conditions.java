@@ -5,20 +5,8 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-/**
- * Evaluates simple, human-readable conditions of the form {@code LEFT <operator> RIGHT}, where
- * either side may contain placeholders. Operators (spaces required around them):
- * <ul>
- *   <li>{@code ==} / {@code equals}, {@code !=} — case-insensitive text equality.</li>
- *   <li>{@code >}, {@code >=}, {@code <}, {@code <=} — numeric comparison.</li>
- *   <li>{@code contains} — substring (case-insensitive).</li>
- *   <li>{@code regex} — the left side matches the right side as a regular expression.</li>
- * </ul>
- * A line with no operator passes when it resolves to {@code true}.
- */
 public final class Conditions {
 
-    // longer/greedier operators first so ">=" is not mistaken for ">".
     private static final String[] OPERATORS = {" >= ", " <= ", " == ", " != ", " > ", " < ",
             " equals ", " contains ", " regex "};
 

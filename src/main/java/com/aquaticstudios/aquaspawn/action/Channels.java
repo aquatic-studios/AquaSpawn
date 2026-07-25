@@ -13,15 +13,9 @@ import org.bukkit.plugin.Plugin;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Plays the configurable notification channels (chat, action bar, title, boss bar, sound and
- * firework) found under a parent config section such as {@code join-motd} or {@code first-join}.
- * Every channel is independently toggleable and fully editable (timings, colors, sounds).
- */
 public final class Channels {
 
     private static final long TICKS_PER_SECOND = 20L;
-    /** Vanilla action bars fade after ~3s; resend on this interval to honour longer durations. */
     private static final long ACTIONBAR_INTERVAL_TICKS = 40L;
 
     private final Plugin plugin;
@@ -30,7 +24,6 @@ public final class Channels {
         this.plugin = plugin;
     }
 
-    /** Plays every enabled channel defined under {@code section}. */
     public void play(Player player, ConfigurationSection section) {
         if (section == null) {
             return;
@@ -67,8 +60,7 @@ public final class Channels {
         }
         String text = section.getString("text", "");
         int seconds = Math.max(1, section.getInt("stay", 3));
-        int resends = (int) Math.ceil(seconds / 2.0);
-        resendActionBar(player, text, resends);
+        resendActionBar(player, text, (int) Math.ceil(seconds / 2.0));
     }
 
     private void resendActionBar(Player player, String text, int remaining) {

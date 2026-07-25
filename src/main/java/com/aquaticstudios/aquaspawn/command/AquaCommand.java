@@ -1,7 +1,6 @@
 package com.aquaticstudios.aquaspawn.command;
 
 import com.aquaticstudios.aquaspawn.utils.CC;
-
 import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.config.Messages;
 import com.aquaticstudios.aquaspawn.menu.MenuManager;

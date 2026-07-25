@@ -10,16 +10,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
-/**
- * Orchestrates the {@code custom-join} config section:
- * <ul>
- *   <li>{@code first-join} — runs only on a player's very first join; when {@code override} is
- *       true it replaces the regular {@code join-motd}.</li>
- *   <li>{@code join-motd} — runs on every join.</li>
- *   <li>{@code actions} — a command/action list gated by {@code disable-worlds} and optional
- *       operator {@code conditions}.</li>
- * </ul>
- */
 public final class CustomJoin {
 
     private final ConfigFile config;
@@ -35,7 +25,7 @@ public final class CustomJoin {
     }
 
     public void handle(Player player, boolean firstJoin) {
-        ConfigurationSection root = config.get().getConfigurationSection("custom-join");
+        ConfigurationSection root = config.get().getConfigurationSection("join");
         if (root == null || !root.getBoolean("enabled", true)) {
             return;
         }

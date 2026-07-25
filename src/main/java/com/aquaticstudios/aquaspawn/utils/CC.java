@@ -24,35 +24,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Central text engine for AquaSpawn. One syntax works everywhere (chat, action bars, titles,
- * boss bars):
- * <ul>
- *   <li>Legacy {@code &a} and hex {@code &#54ADF4} codes (converted to MiniMessage).</li>
- *   <li>Full MiniMessage tags ({@code <gradient>}, {@code <bold>}, {@code <#54ADF4>}, ...).</li>
- *   <li>PlaceholderAPI placeholders ({@code %player_name%}).</li>
- *   <li>Player heads: {@code <head:senkex>}, {@code %head:senkex%}, and the content forms
- *       {@code <hd>name</hd>} / {@code <head>name</head>}, all normalised to the head tag.</li>
- *   <li>Centering: {@code <center>...</center>}, combinable with heads
- *       ({@code <center><hd>senkex</hd></center>}).</li>
- * </ul>
- * Components are delivered through {@link BukkitAudiences} so they render on every version 1.16.5+.
- */
 public final class CC {
+
     private static MiniMessage MINI = MiniMessage.miniMessage();
     private static final LegacyComponentSerializer LEGACY = buildSerializer();
 
     private static BukkitAudiences audiences;
 
     private static final Pattern HEX = Pattern.compile("&#([0-9a-fA-F]{6})");
-    private static final Pattern BUNGEE_HEX =
-            Pattern.compile("&x(&[0-9a-fA-F]){6}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern BUNGEE_HEX = Pattern.compile("&x(&[0-9a-fA-F]){6}", Pattern.CASE_INSENSITIVE);
 
-    /** Normalised head tag {@code <head:NAME>}. */
     private static final Pattern HEAD_TAG = Pattern.compile("<head:([^<>]+)>");
-    /** {@code %head:NAME%} placeholder form. */
     private static final Pattern HEAD_PLACEHOLDER = Pattern.compile("%head:([^%]+)%");
-    /** {@code <hd>NAME</hd>} / {@code <head>NAME</head>} content forms. */
     private static final Pattern HEAD_CONTENT = Pattern.compile("<(?:hd|head)>([^<>\\s]+)</(?:hd|head)>");
 
     private static final String[] NAMED = {
@@ -65,9 +48,6 @@ public final class CC {
     private CC() {
     }
 
-    // ------------------------------------------------------------------ lifecycle
-
-    /** Wires up audiences and registers the {@code <head:>} MiniMessage tag. Call once on enable. */
     public static void init(Plugin plugin) {
         audiences = BukkitAudiences.create(plugin);
 
@@ -76,7 +56,6 @@ public final class CC {
             HeadRenderTags head = HeadRenderTags.create(HeadRender.service(), Key.key("aquaspawn", "head"));
             tags.resolver(head.resolver());
         } catch (Throwable ignored) {
-            // heads stay optional; MiniMessage still works without the resolver.
         }
         MINI = MiniMessage.builder().tags(tags.build()).build();
     }
@@ -88,10 +67,6 @@ public final class CC {
         }
     }
 
-    public static BukkitAudiences audiences() {
-        return audiences;
-    }
-
     public static Audience audience(CommandSender sender) {
         return audiences.sender(sender);
     }
@@ -100,29 +75,10 @@ public final class CC {
         return audiences.player(player);
     }
 
-    public static MiniMessage mini() {
-        return MINI;
-    }
-
-    private static LegacyComponentSerializer buildSerializer() {
-        final LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder()
-                .character('§')
-                .hexCharacter('#')
-                .useUnusualXRepeatedCharacterHexFormat();
-
-        if (VersionSupport.supportsHexColors()) builder.hexColors();
-        return builder.build();
-    }
-
-    // ------------------------------------------------------------------ parsing
-
-    public static Component parse(String input) {
-        return parse(null, input);
-    }
-
-    /** Parses a single line (placeholders + heads + centering + colors) into a component. */
     public static Component parse(Player player, String input) {
-        if (input == null || input.isEmpty()) return Component.empty();
+        if (input == null || input.isEmpty()) {
+            return Component.empty();
+        }
         String s = normalizeHeadTags(Placeholders.apply(player, input));
         boolean centered = s.contains("<center>");
         if (centered) {
@@ -136,29 +92,22 @@ public final class CC {
         }
     }
 
-    /** Legacy drop-in: parses the full modern syntax and serialises down to a {@code §} string. */
     public static String format(String input) {
-        return format(null, input);
-    }
-
-    public static String format(Player player, String input) {
-        if (input == null) return "";
+        if (input == null) {
+            return "";
+        }
         try {
-            return LEGACY.serialize(parse(player, input));
+            return LEGACY.serialize(parse(null, input));
         } catch (Throwable t) {
             return input;
         }
     }
 
-    // ------------------------------------------------------------------ multi-line (heads / cards)
-
-    /**
-     * Resolves raw config lines into components, expanding player heads into their pixel-art rows.
-     * Head rendering may fetch skins asynchronously, hence the future.
-     */
     public static CompletableFuture<List<Component>> lines(Player player, List<String> raw) {
         CompletableFuture<List<Component>> pipeline = CompletableFuture.completedFuture(new ArrayList<>());
-        if (raw == null) return pipeline;
+        if (raw == null) {
+            return pipeline;
+        }
         for (String line : raw) {
             String resolved = line == null ? "" : Placeholders.apply(player, line);
             pipeline = pipeline.thenCompose(acc -> lineToComponents(resolved)
@@ -185,8 +134,7 @@ public final class CC {
         if (head.find()) {
             String name = head.group(1).trim();
             RenderOptions options = RenderOptions.builder().centered(centered).build();
-            return HeadRenderComponents.render(name, options)
-                    .exceptionally(ex -> one(parse(null, resolved)));
+            return HeadRenderComponents.render(name, options).exceptionally(ex -> one(parse(null, resolved)));
         }
 
         String mini = toMiniMessage(s);
@@ -200,8 +148,6 @@ public final class CC {
         return list;
     }
 
-    // ------------------------------------------------------------------ sending helpers
-
     public static void send(CommandSender sender, String input) {
         audience(sender).sendMessage(parse(sender instanceof Player ? (Player) sender : null, input));
     }
@@ -210,7 +156,6 @@ public final class CC {
         audience(player).sendActionBar(parse(player, input));
     }
 
-    /** Shows a title/subtitle with tick-based timings (20 ticks = 1 second). */
     public static void sendTitle(Player player, int fadeInTicks, int stayTicks, int fadeOutTicks,
                                  String title, String subtitle) {
         Title.Times times = Title.Times.times(
@@ -220,13 +165,14 @@ public final class CC {
         audience(player).showTitle(Title.title(parse(player, title), parse(player, subtitle), times));
     }
 
-    // ------------------------------------------------------------------ head normalisation
-
-    /** Normalises every accepted head form to the canonical MiniMessage tag {@code <head:NAME>}. */
     private static String normalizeHeadTags(String input) {
         String s = input;
-        if (s.indexOf('%') >= 0) s = replaceHead(HEAD_PLACEHOLDER, s);
-        if (s.indexOf('<') >= 0) s = replaceHead(HEAD_CONTENT, s);
+        if (s.indexOf('%') >= 0) {
+            s = replaceHead(HEAD_PLACEHOLDER, s);
+        }
+        if (s.indexOf('<') >= 0) {
+            s = replaceHead(HEAD_CONTENT, s);
+        }
         return s;
     }
 
@@ -240,19 +186,31 @@ public final class CC {
         return out.toString();
     }
 
+    private static LegacyComponentSerializer buildSerializer() {
+        LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder()
+                .character('§')
+                .hexCharacter('#')
+                .useUnusualXRepeatedCharacterHexFormat();
+
+        if (VersionSupport.supportsHexColors()) {
+            builder.hexColors();
+        }
+        return builder.build();
+    }
+
     private static String toMiniMessage(String input) {
-        if (input == null || input.isEmpty()) return "";
+        if (input == null || input.isEmpty()) {
+            return "";
+        }
 
-        String work = normalizeBungeeHex(input);
-        work = expandHex(work);
+        String work = expandHex(normalizeBungeeHex(input));
 
-        final StringBuilder out = new StringBuilder(work.length() + 16);
-        final char[] chars = work.toCharArray();
+        StringBuilder out = new StringBuilder(work.length() + 16);
+        char[] chars = work.toCharArray();
         for (int i = 0; i < chars.length; i++) {
-            final char c = chars[i];
+            char c = chars[i];
             if ((c == '&' || c == '§') && i + 1 < chars.length) {
-                final char code = Character.toLowerCase(chars[i + 1]);
-                final String tag = translate(code);
+                String tag = translate(Character.toLowerCase(chars[i + 1]));
                 if (tag != null) {
                     out.append(tag);
                     i++;
@@ -265,8 +223,8 @@ public final class CC {
     }
 
     private static String expandHex(String input) {
-        final Matcher matcher = HEX.matcher(input);
-        final StringBuffer buffer = new StringBuffer(input.length() + 16);
+        Matcher matcher = HEX.matcher(input);
+        StringBuffer buffer = new StringBuffer(input.length() + 16);
         while (matcher.find()) {
             matcher.appendReplacement(buffer, Matcher.quoteReplacement("<reset><#" + matcher.group(1) + ">"));
         }
@@ -275,11 +233,11 @@ public final class CC {
     }
 
     private static String normalizeBungeeHex(String input) {
-        final Matcher matcher = BUNGEE_HEX.matcher(input);
-        final StringBuffer buffer = new StringBuffer(input.length());
+        Matcher matcher = BUNGEE_HEX.matcher(input);
+        StringBuffer buffer = new StringBuffer(input.length());
         while (matcher.find()) {
-            final String raw = matcher.group();
-            final StringBuilder hex = new StringBuilder(8).append("&#");
+            String raw = matcher.group();
+            StringBuilder hex = new StringBuilder(8).append("&#");
             for (int i = 3; i < raw.length(); i += 2) {
                 hex.append(raw.charAt(i));
             }
@@ -290,9 +248,10 @@ public final class CC {
     }
 
     private static String translate(char code) {
-        final int index = CODES.indexOf(code);
-        if (index != -1) return "<reset><" + NAMED[index] + ">";
-
+        int index = CODES.indexOf(code);
+        if (index != -1) {
+            return "<reset><" + NAMED[index] + ">";
+        }
         switch (code) {
             case 'l':
                 return "<bold>";

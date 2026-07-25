@@ -1,7 +1,6 @@
 package com.aquaticstudios.aquaspawn.menu;
 
 import com.aquaticstudios.aquaspawn.utils.CC;
-
 import com.aquaticstudios.aquaspawn.utils.Fireworks;
 import com.aquaticstudios.aquaspawn.utils.Placeholders;
 import com.aquaticstudios.aquaspawn.utils.Scheduler;
@@ -16,13 +15,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Runs the inline {@code [type] data} action list shared by menus and join events. Supported
- * types: {@code [message]}, {@code [actionbar]}, {@code [title] fadeIn;stay;fadeOut;title;subtitle},
- * {@code [player]}/{@code [command]}, {@code [console]}, {@code [sound] S:vol:pitch},
- * {@code [effect] EFFECT:ticks:amplifier}, {@code [firework]}, {@code [teleport] x,y,z,yaw,pitch}
- * and {@code [close]}.
- */
 public final class ActionHandler {
 
     private final Plugin plugin;
@@ -95,7 +87,6 @@ public final class ActionHandler {
     }
 
     private void title(Player player, String data) {
-        // fadeIn;stay;fadeOut;title;subtitle  (timings in ticks, all parts optional but ordered)
         String[] parts = data.split(";", 5);
         int fadeIn = parts.length > 0 ? parseInt(parts[0], 10) : 10;
         int stay = parts.length > 1 ? parseInt(parts[1], 40) : 40;

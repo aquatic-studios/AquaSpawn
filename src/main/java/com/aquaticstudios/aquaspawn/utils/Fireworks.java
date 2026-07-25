@@ -8,13 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Spawns configurable fireworks at a player's location. Entity spawning is dispatched through
- * {@link Scheduler} so it stays on the correct region thread under Folia.
- */
 public final class Fireworks {
 
     private Fireworks() {
@@ -41,6 +38,7 @@ public final class Fireworks {
                 colors.add(Color.WHITE);
             }
             effect.withColor(colors);
+
             List<Color> fade = parseColors(section.getStringList("fade-colors"));
             if (!fade.isEmpty()) {
                 effect.withFade(fade);
@@ -52,8 +50,8 @@ public final class Fireworks {
         });
     }
 
-    private static java.util.List<Color> parseColors(List<String> raw) {
-        java.util.List<Color> colors = new java.util.ArrayList<>();
+    private static List<Color> parseColors(List<String> raw) {
+        List<Color> colors = new ArrayList<>();
         for (String value : raw) {
             Color color = color(value);
             if (color != null) {

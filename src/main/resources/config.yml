@@ -38,11 +38,11 @@ spawn:
 #   &a / &#54ADF4     -> legacy and hex colors
 #   <gradient> <bold> -> full MiniMessage tags
 #   %player_name%     -> PlaceholderAPI placeholders (if installed)
-#   %aquaspawn_total_players%  -> unique players that ever joined
-#   %aquaspawn_player_number%  -> this player's permanent join number
-#   <center>...</center>       -> center the line
+#   %aquaspawn_total_players%   -> unique players that ever joined (on first join
+#                                  this is the new player's number too)
+#   <center>...</center>        -> center the line
 #   <hd>name</hd> / %head:name% -> render a player's head as pixel art (chat only)
-custom-join:
+join:
   # master switch for everything below.
   enabled: true
 
@@ -96,7 +96,7 @@ custom-join:
         - "<center><hd>%player_name%</hd></center>"
         - "<empty>"
         - "<center>&fWelcome &#54ADF4%player_name% &fto the server"
-        - "<center>&7You are player &#54ADF4#%aquaspawn_player_number%"
+        - "<center>&7You are player &#54ADF4#%aquaspawn_total_players%"
         - "<empty>"
     actionbar:
       enabled: false
@@ -108,7 +108,7 @@ custom-join:
       stay: 60
       fade-out: 10
       title: "&#54ADF4&lWelcome"
-      subtitle: "&fYou are player &#8DFF87#%aquaspawn_player_number%"
+      subtitle: "&fYou are player &#8DFF87#%aquaspawn_total_players%"
     bossbar:
       enabled: false
       text: "&aEnjoy your stay!"
