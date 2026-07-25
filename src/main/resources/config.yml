@@ -165,7 +165,7 @@ custom-events:
     # same action types as join.actions
     actions:
       - "[CONSOLE] give %player% diamond 1"
-      - "[PLAYER] kit claim"
+      - "[PLAYER] kit claim default"
       - "[EFFECT] SPEED:2"
 
 # Do not change this
