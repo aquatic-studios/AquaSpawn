@@ -28,6 +28,7 @@ messages:
   spawn-set: "%prefix%Spawn &#54ADF4%aquaspawn_name% &fis now the join spawn &#54ADF4(%aquaspawn_type%)"
   menu-full: "%prefix%The menu is full, no free slots left"
 
+  spawn-no-permission: "%prefix%&#FFA42D[Warning] You don't have permission to use &#54ADF4/spawn"
   spawn-teleported: "%prefix%You have been teleported to spawn &#56FF00Correctly"
   spawn-cooldown: "%prefix%&#FFA42D[Warning] Wait &#FFA42D%time%s &fbefore using &#54ADF4/spawn &fagain"
   spawn-not-created: "%prefix%&#FFA42D[Warning] There is no spawn named &7(%aquaspawn_name%)&#FFA42D. Create it first with &#54ADF4/aquaspawn create %aquaspawn_name%"

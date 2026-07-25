@@ -9,11 +9,4 @@ api-version: '1.16'
 folia-supported: true
 
 main: com.aquaticstudios.aquaspawn.AquaSpawn
-website: 'https://github.com/aquatic-studios'
-
-commands:
-  aquaspawn:
-    description: Main command.
-    aliases: [aqspawn]
-  spawn:
-    description: Teleport to the server spawn.
+website: 'https://github.com/aquatic-studios/AquaSpawn'

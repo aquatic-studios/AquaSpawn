@@ -1,110 +1,132 @@
-# AquaSpawn config. most options apply with /aquaspawn reload, a few structural ones need a restart.
-# colors work everywhere text is shown: &a legacy, &#54ADF4 or <#54ADF4> hex, or full MiniMessage
-# like <gradient:#54ADF4:#8DFF87>text</gradient>.
-
 settings:
-  # where players are sent on join, must be a spawn you made with /aquaspawn create <name>
-  # "none" never teleports anyone, handy if another plugin already handles spawns
+  # spawn players land on when joining, made with /aquaspawn create <name>, "none" = never teleport
   join-spawn: "none"
 
-  # when the teleport above happens
-  # first = only the very first time they ever join, force = every single join
-  # custom = ignore this and read the "custom" block below instead
+  # first = only their first join ever, force = every join, custom = use the block below
   type-spawn: force # first, force, custom
 
-  # only read when type-spawn is custom, lets first-timers and returning players land in different spawns
-  # each field is a created spawn name, or "none" / "null" / "false" to skip teleporting on that side
-  # example: first: "welcome" force: "hub" sends new players to welcome and everyone else to hub
+  # only read when type-spawn is custom, a spawn name per case or "none" to skip
   custom:
     first: "none"
     force: "none"
 
-  # hide the vanilla yellow "player joined the game" line so only your custom-events messages show
-  hide-join-message: false
+  # replaces the vanilla "joined" line (always hidden), %player% = joining player, one entry per line
+  join-message:
+    enabled: true
+    text:
+      - "&#6AB7FF[+] &f%player% &#6AB7FFjoin the game"
 
-  # hide the vanilla "player left the game" line
-  hide-quit-message: false
+  # replaces the vanilla "left" line (always hidden)
+  quit-message:
+    enabled: true
+    text:
+      - "&#FF3131[-] &f%player% &#FF3131left the game"
 
 spawn:
-  # minimum seconds between uses of /spawn, stops teleport spam, 0 disables it
-  # players with aquaspawn.spawn.bypass are never affected
+  # require a permission to use /spawn, false = anyone can use it
+  require-permission: false
+  # permission checked when require-permission is true (aquaspawn.admin always works)
+  permission: "aquaspawn.spawn"
+  # seconds between /spawn uses, 0 disables, bypass with aquaspawn.spawn.bypass
   cooldown: 3
 
-# everything shown or run when a player joins, every channel is optional and independently toggleable
-# extra placeholders on top of any PlaceholderAPI ones:
-#   %aquaspawn_total_players%   unique players that ever joined, on a first join this is the new player's number
-#   %player_name%               the joining player, needs PlaceholderAPI installed
-# extra text tags:
-#   <center>text</center>       center the line in chat
-#   <hd>name</hd> or %head:name%  render that player's head as pixel art, chat only, not on titles or bars
+# cache the head skin on join so <hd> welcomes show instantly instead of waiting on a download
+preload-skins: true
+
+# tell console and admins (aquaspawn.update) when a newer version is on spigot
+update-notify: true
+
+# shown/run on join, every channel toggles on its own
+# placeholders: %aquaspawn_total_players% (unique players ever, = this player's number on first join) + any PlaceholderAPI
+# text tags: <center>text</center> center a line | <hd> one head row (use 8 for a full head) | <head>name</head> inline head
 custom-events:
-  # master switch, false turns off join, first-join and actions all at once
+  # master switch for join, first-join and actions
   enabled: true
+
+  # ticks to wait before titles/action bars/boss bars (dropped if sent too early), raise if they don't show
+  delay-ticks: 20
 
   # shown on EVERY join
   join:
     enabled: true
 
-    # chat message, one entry per line, "<empty>" prints a blank line
+    # chat lines, "<empty>" = blank line
     chat:
       enabled: true
       message:
         - "<empty>"
-        - "<center>&fWelcome back &#54ADF4%player_name%"
+        - "<center>&fWelcome back &#54ADF4%player_name%</center>"
         - "<empty>"
 
-    # action bar, the text just above the hotbar, stay is how many seconds it stays up
+    # text above the hotbar, stay = seconds
     actionbar:
-      enabled: false
+      enabled: true
       text: "&#54ADF4Welcome back, %player_name%!"
       stay: 3
 
-    # big title and subtitle in the middle of the screen, all timings are in ticks (20 ticks = 1 second)
+    # centered title/subtitle, timings in ticks (20 = 1s)
     title:
-      enabled: false
+      enabled: true
       fade-in: 10
       stay: 40
       fade-out: 10
       title: "&#54ADF4Welcome"
       subtitle: "&f%player_name%"
 
-    # boss bar at the top of the screen
-    # color:   PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE
-    # overlay: PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
-    # progress: 0.0 to 1.0 how full the bar is, stay: seconds before it is removed, 0 keeps it the whole session
+    # bar at the top, progress 0.0-1.0, stay in seconds (0 = whole session)
     bossbar:
-      enabled: false
+      enabled: true
       text: "&aWelcome to the server"
-      color: BLUE
-      overlay: PROGRESS
+      color: BLUE # PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE
+      overlay: PROGRESS # PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
       progress: 1.0
       stay: 5
 
-    # sound played on join, value is SOUND:volume:pitch, volume and pitch are optional
+    # SOUND:volume:pitch, volume and pitch optional
     sound:
-      enabled: false
+      enabled: true
       value: "BLOCK_NOTE_BLOCK_PLING:1:1"
 
-  # shown ONLY the very first time a player ever joins, tracked forever so it never repeats
+    # power = flight height, colors/fade-colors are hex
+    firework:
+      enabled: true
+      power: 1
+      type: BALL # BALL, BALL_LARGE, STAR, BURST, CREEPER
+      colors:
+        - "#54ADF4"
+      fade-colors:
+        - "#FFFFFF"
+      flicker: false
+      trail: true
+
+    # %player% = joining player
+    # [PLAYER] cmd | [CONSOLE] cmd | [EFFECT] TYPE:amplifier[:seconds]
+    actions:
+      - "[EFFECT] SPEED:0:30"
+
+  # shown ONLY on a player's very first join ever, tracked forever
   first-join:
     enabled: true
 
-    # true = a first join shows ONLY this and skips the join block above
-    # false = both first-join and join run together on that first join
+    # true = show only this and skip the join block, false = run both on first join
     override: true
 
     chat:
       enabled: true
       message:
         - "<empty>"
-        - "<center><hd>%player_name%</hd></center>"
-        - "<empty>"
-        - "<center>&fWelcome &#54ADF4%player_name% &fto the server"
-        - "<center>&7You are player &#54ADF4#%aquaspawn_total_players%"
+        - "<hd>"
+        - "<hd> &#54ADF4&lWELCOME"
+        - "<hd>"
+        - "<hd> &fWelcome &#54ADF4%player_name% &fto the server"
+        - "<hd> &7You are player &#54ADF4#%aquaspawn_total_players%"
+        - "<hd>"
+        - "<hd> &fYou playing in &#6AB7FFplay.yourserver.net"
+        - "<hd>"
         - "<empty>"
 
     actionbar:
-      enabled: false
+      enabled: true
       text: "&#8DFF87Welcome to the server!"
       stay: 4
 
@@ -117,21 +139,22 @@ custom-events:
       subtitle: "&fYou are player &#8DFF87#%aquaspawn_total_players%"
 
     bossbar:
-      enabled: false
+      enabled: true
       text: "&aEnjoy your stay!"
       color: GREEN
       overlay: PROGRESS
       progress: 1.0
       stay: 6
 
-    # a firework launched at the player on their first join
-    # type: BALL, BALL_LARGE, STAR, BURST, CREEPER, power is the flight height, colors and fade-colors are hex
     firework:
       enabled: true
       power: 1
       type: BALL_LARGE
-      colors: [ "#54ADF4", "#8DFF87" ]
-      fade-colors: [ "#FFFFFF" ]
+      colors:
+        - "#54ADF4"
+        - "#8DFF87"
+      fade-colors:
+        - "#FFFFFF"
       flicker: true
       trail: true
 
@@ -139,16 +162,11 @@ custom-events:
       enabled: true
       value: "ENTITY_PLAYER_LEVELUP:1:1"
 
-  # commands and effects run on every join, %player% is replaced with the player's name
-  #   [PLAYER]  <command>   the joining player runs the command
-  #   [CONSOLE] <command>   the console runs the command, use this for anything that needs permissions
-  #   [EFFECT]  TYPE:amplifier          a permanent potion effect
-  #   [EFFECT]  TYPE:amplifier:seconds  the same effect but only for that many seconds
-  # also usable here: [MESSAGE] text, [ACTIONBAR] text, [SOUND] SOUND:vol:pitch, [FIREWORK]
-  actions:
-    - "[CONSOLE] give %player% diamond 1"
-    - "[PLAYER] kit claim"
-    - "[EFFECT] SPEED:2"
+    # same action types as join.actions
+    actions:
+      - "[CONSOLE] give %player% diamond 1"
+      - "[PLAYER] kit claim"
+      - "[EFFECT] SPEED:2"
 
 # Do not change this
 version: 1
