@@ -1,4 +1,4 @@
-menu_title: '&8AquaSpawn'
+menu_title: '&0AquaSpawn'
 size: 45
 
 items:
@@ -12,5 +12,3 @@ items:
       - '[close]'
     right_click_commands:
       - '[close]'
-
-version: 1
