@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public final class Scheduler {
@@ -74,6 +75,23 @@ public final class Scheduler {
             runNow.invoke(scheduler, plugin, (Consumer<Object>) ignored -> task.run());
         } catch (Throwable t) {
             task.run();
+        }
+    }
+
+    public static void runAsyncTimer(Plugin plugin, Runnable task, long intervalTicks) {
+        long interval = Math.max(1L, intervalTicks);
+        if (!FOLIA) {
+            Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, task, interval, interval);
+            return;
+        }
+        try {
+            Object scheduler = Bukkit.class.getMethod("getAsyncScheduler").invoke(null);
+            Method runAtFixedRate = scheduler.getClass().getMethod("runAtFixedRate",
+                    Plugin.class, Consumer.class, long.class, long.class, TimeUnit.class);
+            long ms = interval * 50L;
+            runAtFixedRate.invoke(scheduler, plugin,
+                    (Consumer<Object>) ignored -> task.run(), ms, ms, TimeUnit.MILLISECONDS);
+        } catch (Throwable ignored) {
         }
     }
 }

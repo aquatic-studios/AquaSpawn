@@ -34,7 +34,7 @@ public final class JoinListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
         Player player = event.getPlayer();
-        boolean firstJoin = playerData.registerFirstJoin(player.getName());
+        boolean firstJoin = playerData.registerFirstJoin(player.getUniqueId(), player.getName());
 
         customJoin.handle(player, firstJoin).whenComplete((ignored, error) ->
                 Scheduler.runForEntity(plugin, player,
