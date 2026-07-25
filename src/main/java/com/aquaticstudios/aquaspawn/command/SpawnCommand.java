@@ -1,5 +1,6 @@
 package com.aquaticstudios.aquaspawn.command;
 
+import com.aquaticstudios.aquaspawn.utils.Permissions;
 import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.config.Messages;
 import com.aquaticstudios.aquaspawn.scheduler.Scheduler;
@@ -39,6 +40,12 @@ public final class SpawnCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
 
+        if (config.get().getBoolean("spawn.require-permission", false)
+                && !Permissions.has(player, config.get().getString("spawn.permission", "aquaspawn.spawn"))) {
+            messages.send(player, "spawn-no-permission");
+            return true;
+        }
+
         String name = config.get().getString("settings.join-spawn", "");
         if (name == null || name.isEmpty()) {
             messages.send(player, "spawn-not-set");
@@ -66,7 +73,7 @@ public final class SpawnCommand implements CommandExecutor {
         }
 
         int cooldown = config.get().getInt("spawn.cooldown", 3);
-        if (cooldown > 0 && !player.hasPermission("aquaspawn.spawn.bypass")) {
+        if (cooldown > 0 && !Permissions.has(player, "aquaspawn.spawn.bypass")) {
             long now = System.currentTimeMillis();
             Long last = cooldowns.get(player.getUniqueId());
             if (last != null) {

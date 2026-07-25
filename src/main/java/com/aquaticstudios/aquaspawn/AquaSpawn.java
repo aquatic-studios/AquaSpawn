@@ -1,24 +1,26 @@
 package com.aquaticstudios.aquaspawn;
 
 import com.aquaticstudios.aquaspawn.command.AquaCommand;
+import com.aquaticstudios.aquaspawn.command.CommandRegistry;
 import com.aquaticstudios.aquaspawn.command.SpawnCommand;
 import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.config.Messages;
 import com.aquaticstudios.aquaspawn.listener.DefaultListener;
 import com.aquaticstudios.aquaspawn.listener.JoinListener;
-import com.aquaticstudios.aquaspawn.listener.PlayerDataListener;
 import com.aquaticstudios.aquaspawn.listener.SpawnListener;
 import com.aquaticstudios.aquaspawn.menu.MenuListener;
 import com.aquaticstudios.aquaspawn.menu.MenuManager;
 import com.aquaticstudios.aquaspawn.placeholder.AquaExpansion;
 import com.aquaticstudios.aquaspawn.utils.CC;
 import com.aquaticstudios.aquaspawn.utils.Metrics;
+import com.aquaticstudios.aquaspawn.utils.UpdateChecker;
 import com.aquaticstudios.aquaspawn.data.PlayerData;
 import com.aquaticstudios.aquaspawn.scheduler.Scheduler;
 import com.github.senkex.headrender.HeadRender;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Collections;
 
 public final class AquaSpawn extends JavaPlugin {
 
@@ -39,10 +41,12 @@ public final class AquaSpawn extends JavaPlugin {
         MenuManager menu = new MenuManager(this, menuFile);
         playerData = new PlayerData(this);
 
+        UpdateChecker updateChecker = new UpdateChecker(this, config);
+        updateChecker.check();
+
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new PlayerDataListener(playerData), this);
         pm.registerEvents(new MenuListener(menu), this);
-        pm.registerEvents(new JoinListener(this, config, playerData), this);
+        pm.registerEvents(new JoinListener(this, config, playerData, updateChecker), this);
         pm.registerEvents(new SpawnListener(this, config, menuFile), this);
         pm.registerEvents(new DefaultListener(config), this);
 
@@ -51,16 +55,12 @@ public final class AquaSpawn extends JavaPlugin {
         }
 
         AquaCommand command = new AquaCommand(this, config, menuFile, messagesFile, messages, menu, playerData);
-        PluginCommand pluginCommand = getCommand("aquaspawn");
-        if (pluginCommand != null) {
-            pluginCommand.setExecutor(command);
-            pluginCommand.setTabCompleter(command);
-        }
+        CommandRegistry.register(this, "aquaspawn", "Main command.",
+                Collections.singletonList("aqspawn"), command, command);
 
-        PluginCommand spawnCommand = getCommand("spawn");
-        if (spawnCommand != null) {
-            spawnCommand.setExecutor(new SpawnCommand(this, config, menuFile, messages));
-        }
+        SpawnCommand spawnCommand = new SpawnCommand(this, config, menuFile, messages);
+        CommandRegistry.register(this, "spawn", "Teleport to the server spawn.",
+                Collections.emptyList(), spawnCommand, null);
 
         getLogger().info("AquaSpawn v" + getDescription().getVersion() + " enabled ("
                 + (Scheduler.isFolia() ? "Folia" : "Bukkit") + " scheduler).");

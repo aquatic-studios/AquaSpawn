@@ -1,6 +1,7 @@
 package com.aquaticstudios.aquaspawn.command;
 
 import com.aquaticstudios.aquaspawn.utils.CC;
+import com.aquaticstudios.aquaspawn.utils.Permissions;
 import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.config.Messages;
 import com.aquaticstudios.aquaspawn.menu.MenuManager;
@@ -82,7 +83,7 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
     }
 
     private void help(CommandSender sender) {
-        if (!sender.hasPermission("aquaspawn.help")) {
+        if (!Permissions.has(sender,"aquaspawn.help")) {
             messages.send(sender, "no-permission");
             return;
         }
@@ -90,7 +91,7 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
     }
 
     private void menu(CommandSender sender) {
-        if (!sender.hasPermission("aquaspawn.menu")) {
+        if (!Permissions.has(sender,"aquaspawn.menu")) {
             messages.send(sender, "no-permission");
             return;
         }
@@ -102,7 +103,7 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
     }
 
     private void reload(CommandSender sender) {
-        if (!sender.hasPermission("aquaspawn.reload")) {
+        if (!Permissions.has(sender,"aquaspawn.reload")) {
             messages.send(sender, "no-permission");
             return;
         }
@@ -114,7 +115,7 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
     }
 
     private void reset(CommandSender sender) {
-        if (!sender.hasPermission("aquaspawn.reset")) {
+        if (!Permissions.has(sender,"aquaspawn.reset")) {
             messages.send(sender, "no-permission");
             return;
         }
@@ -123,7 +124,7 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
     }
 
     private void set(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("aquaspawn.set")) {
+        if (!Permissions.has(sender,"aquaspawn.set")) {
             messages.send(sender, "no-permission");
             return;
         }
@@ -167,7 +168,7 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
     }
 
     private void create(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("aquaspawn.create")) {
+        if (!Permissions.has(sender,"aquaspawn.create")) {
             messages.send(sender, "no-permission");
             return;
         }

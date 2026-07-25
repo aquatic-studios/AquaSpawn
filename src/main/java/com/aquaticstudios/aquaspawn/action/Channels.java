@@ -12,6 +12,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
 public final class Channels {
 
@@ -24,34 +25,49 @@ public final class Channels {
         this.plugin = plugin;
     }
 
-    public void play(Player player, ConfigurationSection section) {
+    public CompletableFuture<Void> playInstant(Player player, ConfigurationSection section) {
+        if (section == null) {
+            return CompletableFuture.completedFuture(null);
+        }
+        CompletableFuture<Void> chatDone = chat(player, section.getConfigurationSection("chat"));
+        sound(player, section.getConfigurationSection("sound"));
+        Fireworks.spawn(plugin, player, section.getConfigurationSection("firework"));
+        return chatDone;
+    }
+
+    public void playDelayed(Player player, ConfigurationSection section) {
         if (section == null) {
             return;
         }
-        chat(player, section.getConfigurationSection("chat"));
         actionBar(player, section.getConfigurationSection("actionbar"));
         title(player, section.getConfigurationSection("title"));
         bossBar(player, section.getConfigurationSection("bossbar"));
-        sound(player, section.getConfigurationSection("sound"));
-        Fireworks.spawn(plugin, player, section.getConfigurationSection("firework"));
     }
 
-    private void chat(Player player, ConfigurationSection section) {
+    private CompletableFuture<Void> chat(Player player, ConfigurationSection section) {
         if (section == null || !section.getBoolean("enabled", true)) {
-            return;
+            return CompletableFuture.completedFuture(null);
         }
         List<String> message = section.getStringList("message");
         if (message.isEmpty()) {
-            return;
+            return CompletableFuture.completedFuture(null);
         }
-        CC.lines(player, message).thenAccept(components -> Scheduler.runForEntity(plugin, player, () -> {
-            if (!player.isOnline()) {
+        CompletableFuture<Void> done = new CompletableFuture<>();
+        CC.lines(player, message).whenComplete((components, error) -> {
+            if (error != null || components == null) {
+                done.complete(null);
                 return;
             }
-            for (Component component : components) {
-                CC.audience(player).sendMessage(component);
-            }
-        }));
+            Scheduler.runForEntity(plugin, player, () -> {
+                if (player.isOnline()) {
+                    for (Component component : components) {
+                        CC.audience(player).sendMessage(component);
+                    }
+                }
+                done.complete(null);
+            });
+        });
+        return done;
     }
 
     private void actionBar(Player player, ConfigurationSection section) {
