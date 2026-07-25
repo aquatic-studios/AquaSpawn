@@ -143,15 +143,58 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
             messages.send(sender, "spawn-not-created", "%aquaspawn_name%", name);
             return;
         }
+
+        if (type.equals("custom")) {
+            String firstArg = extract(args, "first:");
+            String forceArg = extract(args, "force:");
+            if (firstArg == null || forceArg == null) {
+                messages.send(sender, "spawn-usage-set-custom");
+                return;
+            }
+            String firstResolved = resolveSpawnOrNone(firstArg);
+            if (firstResolved == null) {
+                messages.send(sender, "spawn-not-created", "%aquaspawn_name%", firstArg);
+                return;
+            }
+            String forceResolved = resolveSpawnOrNone(forceArg);
+            if (forceResolved == null) {
+                messages.send(sender, "spawn-not-created", "%aquaspawn_name%", forceArg);
+                return;
+            }
+            config.get().set("settings.custom.first", firstResolved);
+            config.get().set("settings.custom.force", forceResolved);
+        }
+
         config.get().set("settings.join-spawn", resolved);
         config.get().set("settings.type-spawn", type);
-        if (type.equals("custom")) {
-            config.get().set("settings.custom.first", resolved);
-            config.get().set("settings.custom.force", resolved);
-        }
         config.save();
         config.reload();
         messages.send(sender, "spawn-set", "%aquaspawn_name%", resolved, "%aquaspawn_type%", type);
+    }
+
+    private static String extract(String[] args, String key) {
+        for (int i = 3; i < args.length; i++) {
+            String arg = args[i];
+            if (arg.length() > key.length() && arg.regionMatches(true, 0, key, 0, key.length())) {
+                return arg.substring(key.length());
+            }
+        }
+        return null;
+    }
+
+    private String resolveSpawnOrNone(String value) {
+        if (isDisabled(value)) {
+            return "none";
+        }
+        return resolveSpawn(value);
+    }
+
+    private static boolean isDisabled(String value) {
+        if (value == null) {
+            return true;
+        }
+        String v = value.trim();
+        return v.isEmpty() || v.equalsIgnoreCase("none") || v.equalsIgnoreCase("null") || v.equalsIgnoreCase("false");
     }
 
     private String resolveSpawn(String name) {
@@ -279,6 +322,20 @@ public final class AquaCommand implements CommandExecutor, TabCompleter {
         }
         if (args.length == 3 && args[0].equalsIgnoreCase("set")) {
             return filter(Arrays.asList("first", "force", "custom"), args[2]);
+        }
+        if (args.length >= 4 && args[0].equalsIgnoreCase("set") && args[2].equalsIgnoreCase("custom")) {
+            String token = args[args.length - 1];
+            String lower = token.toLowerCase(Locale.ROOT);
+            String prefix = lower.startsWith("force:") ? "force:" : lower.startsWith("first:") ? "first:" : null;
+            if (prefix == null) {
+                return filter(Arrays.asList("first:", "force:"), token);
+            }
+            List<String> options = new ArrayList<>();
+            options.add(prefix + "none");
+            for (String spawn : spawnNames()) {
+                options.add(prefix + spawn);
+            }
+            return filter(options, token);
         }
         return new ArrayList<>();
     }

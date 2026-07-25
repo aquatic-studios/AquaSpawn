@@ -10,7 +10,22 @@ help:
   - "&#54ADF4/aquaspawn reload &7- &fReload all files"
   - "&#54ADF4/aquaspawn reset &7- &fReset the total players counter"
   - "&#54ADF4/aquaspawn create <name> &7- &fCreate a spawn here"
-  - "&#54ADF4/aquaspawn set <name> <first/force/custom> &7- &fSet the join spawn"
+  - "&#54ADF4/aquaspawn set <name> <first/force> &7- &fSet the join spawn"
+  - "&#54ADF4/aquaspawn set <name> custom first:<name> force:<name> &7- &fDifferent spawn for new/returning"
+  - " "
+
+no-spawn-warning:
+  - " "
+  - " &#FF3131&l[!] CAUTION &7» &fThere is no spawn set up!"
+  - " "
+  - " &fPlayers joining right now are &#FF3131not being sent anywhere&f."
+  - " &fAvoid this for your users and set a safe spawn:"
+  - " "
+  - "   &#54ADF4» &fStand where you want it and run &#54ADF4/aquaspawn create <name>"
+  - "   &#54ADF4» &fActivate it with &#54ADF4/aquaspawn set <name> <first/force>"
+  - "   &#54ADF4» &fOr per case: &#54ADF4/aquaspawn set <name> custom first:<name> force:<name>"
+  - " "
+  - " &7Only staff (&faquaspawn.admin&7) can see this warning."
   - " "
 
 messages:
@@ -24,7 +39,8 @@ messages:
   spawn-created: "%prefix%Spawn &#54ADF4%aquaspawn_name% &fwas created &#56FF00Correctly"
   spawn-exists: "%prefix%Spawn &#54ADF4%aquaspawn_name% &falready exists"
   spawn-usage-create: "%prefix%Usage: &#54ADF4/aquaspawn create <name>"
-  spawn-usage-set: "%prefix%Usage: &#54ADF4/aquaspawn set <name> <first/force/custom>"
+  spawn-usage-set: "%prefix%Usage: &#54ADF4/aquaspawn set <name> <first/force>"
+  spawn-usage-set-custom: "%prefix%Usage: &#54ADF4/aquaspawn set <name> custom first:<name> force:<name>"
   spawn-set: "%prefix%Spawn &#54ADF4%aquaspawn_name% &fis now the join spawn &#54ADF4(%aquaspawn_type%)"
   menu-full: "%prefix%The menu is full, no free slots left"
 
@@ -35,4 +51,5 @@ messages:
   spawn-not-set: "%prefix%&#FFA42D[Warning] The spawn is not set yet, set one with &#54ADF4/aquaspawn set <name> <first/force/custom>"
   spawn-world-missing: "%prefix%&#FFA42D[Warning] The spawn world is not loaded, check your config.yml"
 
+# Do not change this
 version: 1

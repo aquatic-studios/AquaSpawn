@@ -1,6 +1,8 @@
 package com.aquaticstudios.aquaspawn.listener;
 
+import com.aquaticstudios.aquaspawn.utils.Permissions;
 import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
+import com.aquaticstudios.aquaspawn.utils.config.Messages;
 import com.aquaticstudios.aquaspawn.scheduler.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,19 +17,32 @@ import java.util.Locale;
 
 public final class SpawnListener implements Listener {
 
+    private static final long WARNING_DELAY_TICKS = 40L;
+
     private final Plugin plugin;
     private final ConfigFile config;
     private final ConfigFile menu;
+    private final Messages messages;
 
-    public SpawnListener(Plugin plugin, ConfigFile config, ConfigFile menu) {
+    public SpawnListener(Plugin plugin, ConfigFile config, ConfigFile menu, Messages messages) {
         this.plugin = plugin;
         this.config = config;
         this.menu = menu;
+        this.messages = messages;
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+
+        if (isSpawnUnset() && player.hasPermission(Permissions.ADMIN)) {
+            Scheduler.runForEntityLater(plugin, player, () -> {
+                if (player.isOnline()) {
+                    messages.sendList(player, "no-spawn-warning");
+                }
+            }, WARNING_DELAY_TICKS);
+        }
+
         String type = config.get().getString("settings.type-spawn", "force").toLowerCase(Locale.ROOT);
         boolean firstJoin = !player.hasPlayedBefore();
 
@@ -78,6 +93,15 @@ public final class SpawnListener implements Listener {
         } catch (NumberFormatException e) {
             plugin.getLogger().warning("Could not parse coordinates for spawn '" + spawnName + "'");
         }
+    }
+
+    private boolean isSpawnUnset() {
+        String type = config.get().getString("settings.type-spawn", "force").toLowerCase(Locale.ROOT);
+        if (type.equals("custom")) {
+            return isDisabled(config.get().getString("settings.custom.first"))
+                    && isDisabled(config.get().getString("settings.custom.force"));
+        }
+        return isDisabled(config.get().getString("settings.join-spawn", ""));
     }
 
     private static boolean isDisabled(String value) {

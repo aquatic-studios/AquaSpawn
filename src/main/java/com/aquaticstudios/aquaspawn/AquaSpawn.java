@@ -47,7 +47,7 @@ public final class AquaSpawn extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new MenuListener(menu), this);
         pm.registerEvents(new JoinListener(this, config, playerData, updateChecker), this);
-        pm.registerEvents(new SpawnListener(this, config, menuFile), this);
+        pm.registerEvents(new SpawnListener(this, config, menuFile, messages), this);
         pm.registerEvents(new DefaultListener(config), this);
 
         if (pm.isPluginEnabled("PlaceholderAPI")) {
