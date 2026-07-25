@@ -6,11 +6,14 @@ import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.config.Messages;
 import com.aquaticstudios.aquaspawn.listener.DefaultListener;
 import com.aquaticstudios.aquaspawn.listener.JoinListener;
+import com.aquaticstudios.aquaspawn.listener.PlayerDataListener;
 import com.aquaticstudios.aquaspawn.listener.SpawnListener;
 import com.aquaticstudios.aquaspawn.menu.MenuListener;
 import com.aquaticstudios.aquaspawn.menu.MenuManager;
+import com.aquaticstudios.aquaspawn.utils.AquaExpansion;
 import com.aquaticstudios.aquaspawn.utils.CC;
 import com.aquaticstudios.aquaspawn.utils.Metrics;
+import com.aquaticstudios.aquaspawn.utils.PlayerData;
 import com.aquaticstudios.aquaspawn.utils.Scheduler;
 import com.github.senkex.headrender.HeadRender;
 import org.bukkit.command.PluginCommand;
@@ -32,12 +35,18 @@ public final class AquaSpawn extends JavaPlugin {
 
         Messages messages = new Messages(messagesFile);
         MenuManager menu = new MenuManager(this, menuFile);
+        PlayerData playerData = new PlayerData(this);
 
         PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new PlayerDataListener(playerData), this);
         pm.registerEvents(new MenuListener(menu), this);
-        pm.registerEvents(new JoinListener(this, config), this);
+        pm.registerEvents(new JoinListener(this, config, playerData), this);
         pm.registerEvents(new SpawnListener(this, config, menuFile), this);
         pm.registerEvents(new DefaultListener(config), this);
+
+        if (pm.isPluginEnabled("PlaceholderAPI")) {
+            new AquaExpansion(this, playerData).register();
+        }
 
         AquaCommand command = new AquaCommand(this, config, menuFile, messagesFile, messages, menu);
         PluginCommand pluginCommand = getCommand("aquaspawn");

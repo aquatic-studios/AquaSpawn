@@ -4,6 +4,7 @@ import com.aquaticstudios.aquaspawn.utils.CC;
 
 import com.aquaticstudios.aquaspawn.utils.config.ConfigFile;
 import com.aquaticstudios.aquaspawn.utils.Placeholders;
+import com.aquaticstudios.aquaspawn.utils.PlayerData;
 import com.aquaticstudios.aquaspawn.utils.Scheduler;
 import com.github.senkex.centermessage.CenterMessage;
 import com.github.senkex.headrender.HeadRender;
@@ -21,10 +22,12 @@ public final class JoinListener implements Listener {
 
     private final Plugin plugin;
     private final ConfigFile config;
+    private final PlayerData playerData;
 
-    public JoinListener(Plugin plugin, ConfigFile config) {
+    public JoinListener(Plugin plugin, ConfigFile config, PlayerData playerData) {
         this.plugin = plugin;
         this.config = config;
+        this.playerData = playerData;
     }
 
     @EventHandler
