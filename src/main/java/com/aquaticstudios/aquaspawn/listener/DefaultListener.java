@@ -30,7 +30,7 @@ public final class DefaultListener implements Listener {
             return;
         }
         for (String line : section.getStringList("text")) {
-            Component message = CC.parse(who, line.replace("%player%", who.getName()));
+            Component message = CC.parse(who, line);
             for (Player online : Bukkit.getOnlinePlayers()) {
                 CC.audience(online).sendMessage(message);
             }

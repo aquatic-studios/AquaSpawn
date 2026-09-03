@@ -83,7 +83,7 @@ public final class ActionHandler {
     }
 
     private String resolveCommand(Player player, String data) {
-        return Placeholders.apply(player, data).replace("%player%", player.getName());
+        return Placeholders.apply(player, data);
     }
 
     private void title(Player player, String data) {

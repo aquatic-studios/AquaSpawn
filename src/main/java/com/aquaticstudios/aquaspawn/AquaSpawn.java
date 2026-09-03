@@ -11,6 +11,7 @@ import com.aquaticstudios.aquaspawn.listener.SpawnListener;
 import com.aquaticstudios.aquaspawn.menu.MenuListener;
 import com.aquaticstudios.aquaspawn.menu.MenuManager;
 import com.aquaticstudios.aquaspawn.placeholder.AquaExpansion;
+import com.aquaticstudios.aquaspawn.placeholder.Placeholders;
 import com.aquaticstudios.aquaspawn.utils.CC;
 import com.aquaticstudios.aquaspawn.utils.Metrics;
 import com.aquaticstudios.aquaspawn.utils.UpdateChecker;
@@ -40,6 +41,7 @@ public final class AquaSpawn extends JavaPlugin {
         Messages messages = new Messages(messagesFile);
         MenuManager menu = new MenuManager(this, menuFile);
         playerData = new PlayerData(this);
+        Placeholders.init(playerData);
 
         UpdateChecker updateChecker = new UpdateChecker(this, config);
         updateChecker.check();

@@ -37,7 +37,6 @@ preload-skins: true
 update-notify: true
 
 # shown/run on join, every channel toggles on its own
-# placeholders: %aquaspawn_total_players% (unique players ever, = this player's number on first join) + any PlaceholderAPI
 # text tags: <center>text</center> center a line | <hd> one head row (use 8 for a full head) | <head>name</head> inline head
 custom-events:
   # master switch for join, first-join and actions
